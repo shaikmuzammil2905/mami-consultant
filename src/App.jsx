@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { ModalProvider, useModal } from './context/ModalContext';
@@ -10,6 +10,7 @@ import FloatingActions from './components/FloatingActions';
 import PopupModal from './components/PopupModal';
 import PageLoadingFallback from './components/PageLoadingFallback';
 import ErrorBoundary from './components/ErrorBoundary';
+import SplashScreen from './components/SplashScreen';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -58,9 +59,11 @@ function PageTransitionWrapper({ children }) {
 function AppShell() {
   const location = useLocation();
   const { modalState, closeModal } = useModal();
+  const [showSplash, setShowSplash] = useState(true);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#173B63]">
+      <SplashScreen isVisible={showSplash} onFinish={() => setShowSplash(false)} />
       <ScrollProgress />
       <TopBar />
       <Header />

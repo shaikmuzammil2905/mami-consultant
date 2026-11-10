@@ -166,7 +166,13 @@ export default function Hero() {
       </div>
 
       {/* ==================== MOBILE VIEW HERO (image copy 3.png animated ONLY on mobile view) ==================== */}
-      <div className="block md:hidden relative pt-5 pb-0 overflow-hidden bg-gradient-to-b from-[#DFF6FA] via-[#EAFBFD] to-[#E6F8FB]">
+      <div
+        className="block md:hidden relative pt-5 pb-0 overflow-hidden"
+        style={{
+          background:
+            'radial-gradient(circle at 88% 36%, rgba(126, 224, 252, 0.52) 0%, transparent 52%), radial-gradient(circle at 20% 25%, rgba(242, 250, 253, 0.8) 0%, transparent 60%), linear-gradient(155deg, #D5F3FE 0%, #C7EFFD 55%, #B8EBFE 100%)',
+        }}
+      >
         <div className="relative z-10 px-4">
           <AnimatePresence mode="wait">
             <motion.div
@@ -242,10 +248,10 @@ export default function Hero() {
 
         {/* Animated Mobile Hero Visual (image copy 3.png) */}
         <motion.div
-          className="relative -mt-3 w-full overflow-hidden"
+          className="relative -mt-5 w-full overflow-hidden"
           style={{
-            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 16%, black 100%)',
-            maskImage: 'linear-gradient(to bottom, transparent 0%, black 16%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.65) 14%, black 28%, black 100%)',
+            maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.65) 14%, black 28%, black 100%)',
           }}
           initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
           animate={
