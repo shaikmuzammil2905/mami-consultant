@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #0799A8;
+  --primary-dark: #007C91;
+  --secondary: #2ABCC2;
+  --navy: #0B3566;
+  --light-cyan: #EAFBFD;
+  --white: #FFFFFF;
+  --text: #173B63;
+  --muted: #60758A;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background-color: var(--white);
+    overflow-x: clip;
+  }
+
+  body {
+    overflow-x: clip;
+    margin: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    color: var(--navy);
+  }
+}
+
+/* Custom utility gradients & surfaces matching MAMI brand language */
+.bg-mami-gradient {
+  background: linear-gradient(135deg, #007C91 0%, #0799A8 50%, #2ABCC2 100%);
+}
+
+.bg-mami-soft-cyan {
+  background: linear-gradient(180deg, #EAFBFD 0%, #F4FCFD 55%, #FFFFFF 100%);
+}
+
+.bg-mami-footer {
+  background: linear-gradient(180deg, #045B6E 0%, #024354 100%);
+}
+
+.card-mami {
+  background: #FFFFFF;
+  border: 1px solid #CFEFF3;
+  box-shadow: 0 8px 24px -6px rgba(7, 153, 168, 0.12);
+}
+
+.card-mami:hover {
+  border-color: #2ABCC2;
+  box-shadow: 0 16px 36px -8px rgba(7, 153, 168, 0.22);
+}
+
+/* Subtle airplane & map animations for hero */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-7px) translateX(4px);
+  }
+}
+
+@keyframes planeGlide {
+  0% {
+    transform: translate3d(-16px, 8px, 0) rotate(-3deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate3d(8px, -6px, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(28px, -16px, 0) rotate(2deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes shimmerPulse {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-plane-glide {
+  animation: planeGlide 8s ease-in-out infinite alternate;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #eafbfd 25%, #d6f4f8 50%, #eafbfd 75%);
+  background-size: 200% 100%;
+  animation: shimmerPulse 1.6s infinite linear;
+}
+
+/* Swiper pagination overrides */
+.mami-swiper .swiper-pagination-bullet {
+  width: 9px;
+  height: 9px;
+  background: #BCE6EC;
+  opacity: 1;
+  transition: all 0.25s ease;
+}
+
+.mami-swiper .swiper-pagination-bullet-active {
+  background: #0799A8;
+  width: 24px;
+  border-radius: 9999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-float-slow,
+  .animate-plane-glide,
+  .skeleton-shimmer {
+    animation: none !important;
+  }
+}
+
