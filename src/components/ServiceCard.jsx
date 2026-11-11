@@ -26,7 +26,7 @@ export default function ServiceCard({
         to={service.route}
         className={`card-mami group flex flex-col rounded-2xl transition-all duration-300 hover:-translate-y-1.5 h-full overflow-hidden ${
           compact
-            ? `items-center text-center p-4 sm:p-5 ${
+            ? `items-center text-center p-2.5 sm:p-3.5 ${
                 isActive
                   ? '!border-[#0799A8] ring-2 ring-[#0799A8]/20 shadow-[0_14px_32px_-8px_rgba(7,153,168,0.28)]'
                   : ''
@@ -34,29 +34,41 @@ export default function ServiceCard({
             : 'items-start text-left'
         }`}
       >
-        {/* Full Grand Service Picture Header on non-compact (/services & related cards) */}
-        {!compact && service.image && (
-          <div className="w-full bg-gradient-to-b from-[#EAFBFD] to-white border-b border-[#E2F6F9] p-2.5">
+        {/* Mapped Service Visual replacing the plain icon box on both Home & /services */}
+        {compact ? (
+          <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden bg-gradient-to-b from-[#EAFBFD] to-white border border-[#D4F2F6] mb-3 shrink-0 shadow-xs">
+            <img
+              src={service.image}
+              alt={service.title}
+              className="w-full h-full object-contain p-0.5 group-hover:scale-105 transition-transform duration-500"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute bottom-1.5 right-1.5 w-6 h-6 rounded-lg bg-white/95 border border-[#CFEFF3] text-[#0799A8] flex items-center justify-center shadow-xs group-hover:bg-[#0799A8] group-hover:text-white transition-colors"
+            >
+              <Icon className="w-3.5 h-3.5" strokeWidth={2} />
+            </span>
+          </div>
+        ) : (
+          <div className="relative w-full bg-gradient-to-b from-[#EAFBFD] to-white border-b border-[#E2F6F9] p-2.5">
             <img
               src={service.image}
               alt={service.title}
               className="w-full aspect-[16/9] object-contain rounded-xl group-hover:scale-[1.02] transition-transform duration-500"
             />
+            <span
+              aria-hidden="true"
+              className="absolute bottom-4 right-4 w-9 h-9 rounded-xl bg-white/95 border border-[#CFEFF3] text-[#0799A8] flex items-center justify-center shadow-sm group-hover:bg-[#0799A8] group-hover:text-white transition-colors"
+            >
+              <Icon className="w-5 h-5" strokeWidth={1.9} />
+            </span>
           </div>
         )}
 
-        <div className={compact ? 'flex flex-col items-center h-full w-full' : 'p-6 flex flex-col flex-1 w-full'}>
-          <div
-            className={`rounded-2xl bg-[#EAFBFD] border border-[#CFEFF3] text-[#0799A8] flex items-center justify-center group-hover:bg-[#0799A8] group-hover:text-white group-hover:scale-105 transition-all duration-300 ${
-              compact ? 'w-13 h-13 mb-3.5' : 'w-12 h-12 mb-3.5'
-            }`}
-          >
-            <Icon className={compact ? 'w-6 h-6 sm:w-7 sm:h-7' : 'w-6 h-6'} strokeWidth={1.85} />
-          </div>
-
+        <div className={compact ? 'flex flex-col items-center flex-1 w-full px-0.5 pb-1' : 'p-6 flex flex-col flex-1 w-full'}>
           <h3
             className={`font-bold text-[#0B3566] group-hover:text-[#007C91] transition-colors leading-snug ${
-              compact ? 'text-[14px] sm:text-[15px]' : 'text-lg'
+              compact ? 'text-[13px] sm:text-[14px]' : 'text-lg'
             }`}
           >
             {service.title}
@@ -64,13 +76,13 @@ export default function ServiceCard({
 
           <p
             className={`text-[#60758A] leading-relaxed mt-1.5 ${
-              compact ? 'text-[12px] sm:text-[12.5px] line-clamp-2' : 'text-sm flex-1'
+              compact ? 'text-[11.5px] sm:text-[12px] line-clamp-2' : 'text-sm flex-1'
             }`}
           >
             {compact ? service.shortSubtitle : service.shortDescription}
           </p>
 
-          <span className="mt-3 pt-1 inline-flex items-center gap-1 text-xs font-semibold text-[#0799A8] group-hover:text-[#007C91]">
+          <span className="mt-auto pt-2.5 inline-flex items-center gap-1 text-xs font-semibold text-[#0799A8] group-hover:text-[#007C91]">
             <span>View Details</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </span>
