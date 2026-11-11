@@ -17,8 +17,8 @@ export default function Home() {
         description="MAMI Career Consultant provides healthcare licensing guidance, international registration support, training, exam preparation, recruitment and career assistance for medical and allied healthcare professionals."
       />
       <Hero />
-      <ServiceGrid compact={true} />
       <AboutSection />
+      <ServiceGrid compact={true} />
       <GlobalOpportunities />
       <TrainingSection />
       <CertificationsSection />

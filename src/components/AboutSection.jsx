@@ -6,7 +6,7 @@ import { siteConfig } from '../data/siteConfig';
 
 export default function AboutSection() {
   return (
-    <section className="py-10 sm:py-14 bg-mami-soft-cyan">
+    <section className="py-10 sm:py-14 bg-gradient-to-b from-[#FFFFFF] via-[#F3FCFD] to-[#EAFBFD]">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-7 items-center">
           {/* Left: Professional Healthcare + Global Skyline Image */}
