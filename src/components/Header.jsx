@@ -54,7 +54,7 @@ export default function Header() {
   };
 
   const navLinkClass = ({ isActive }) =>
-    `px-3.5 py-2 rounded-lg text-[14.5px] font-semibold transition-all duration-200 whitespace-nowrap ${
+    `px-1 xl:px-2 2xl:px-3 py-1.5 xl:py-2 rounded-lg text-[11px] xl:text-[12.5px] 2xl:text-[14px] font-semibold transition-all duration-200 whitespace-nowrap ${
       isActive
         ? 'bg-[#0799A8] text-white shadow-sm'
         : 'text-[#0B3566] hover:text-[#0799A8] hover:bg-[#EAFBFD]'
@@ -69,7 +69,7 @@ export default function Header() {
             : 'bg-white/85 backdrop-blur-sm py-2.5'
         }`}
       >
-        <div className="max-w-[1320px] mx-auto px-3 sm:px-6 flex items-center justify-between gap-4">
+        <div className="max-w-[1360px] mx-auto px-3 sm:px-5 2xl:px-6 flex items-center justify-between gap-2 xl:gap-3">
           {/* Brand Logo — zero white patch */}
           <Link
             to="/"
@@ -80,13 +80,13 @@ export default function Header() {
               src={siteConfig.logo}
               alt="MAMI Career Consultant & Physio Care"
               className={`w-auto object-contain transition-all duration-300 ${
-                scrolled ? 'h-11 sm:h-12' : 'h-12 sm:h-14'
+                scrolled ? 'h-9 xl:h-11 2xl:h-12' : 'h-10 xl:h-12 2xl:h-13'
               }`}
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-0.5 2xl:gap-1" aria-label="Main Navigation">
             <NavLink to="/" end className={navLinkClass}>
               Home
             </NavLink>
@@ -108,7 +108,7 @@ export default function Header() {
               <NavLink
                 to="/services"
                 className={({ isActive }) =>
-                  `inline-flex items-center gap-1 px-3.5 py-2 rounded-lg text-[14.5px] font-semibold transition-all duration-200 whitespace-nowrap ${
+                  `inline-flex items-center gap-0.5 xl:gap-1 px-1 xl:px-2 2xl:px-3 py-1.5 xl:py-2 rounded-lg text-[11px] xl:text-[12.5px] 2xl:text-[14px] font-semibold transition-all duration-200 whitespace-nowrap ${
                     isActive
                       ? 'bg-[#0799A8] text-white shadow-sm'
                       : 'text-[#0B3566] hover:text-[#0799A8] hover:bg-[#EAFBFD]'
@@ -117,7 +117,7 @@ export default function Header() {
               >
                 <span>Our Services</span>
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
                     openDropdown === 'services' ? 'rotate-180' : ''
                   }`}
                 />
@@ -155,7 +155,7 @@ export default function Header() {
               <NavLink
                 to="/training"
                 className={({ isActive }) =>
-                  `inline-flex items-center gap-1 px-3.5 py-2 rounded-lg text-[14.5px] font-semibold transition-all duration-200 whitespace-nowrap ${
+                  `inline-flex items-center gap-0.5 xl:gap-1 px-1 xl:px-2 2xl:px-3 py-1.5 xl:py-2 rounded-lg text-[11px] xl:text-[12.5px] 2xl:text-[14px] font-semibold transition-all duration-200 whitespace-nowrap ${
                     isActive
                       ? 'bg-[#0799A8] text-white shadow-sm'
                       : 'text-[#0B3566] hover:text-[#0799A8] hover:bg-[#EAFBFD]'
@@ -164,7 +164,7 @@ export default function Header() {
               >
                 <span>Training</span>
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
                     openDropdown === 'training' ? 'rotate-180' : ''
                   }`}
                 />
@@ -197,17 +197,25 @@ export default function Header() {
               Job Assistance
             </NavLink>
 
+            <NavLink to="/career" className={navLinkClass}>
+              Career
+            </NavLink>
+
+            <NavLink to="/collaborate" className={navLinkClass}>
+              Collaborate With MAMI
+            </NavLink>
+
             <NavLink to="/contact" className={navLinkClass}>
               Contact Us
             </NavLink>
           </nav>
 
           {/* Desktop Right CTA + Mobile Hamburger */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => openModal('enquiry', { source: 'Header Button' })}
-              className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#0799A8] to-[#007C91] text-white font-semibold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer group"
+              className="hidden lg:inline-flex items-center gap-1 px-2.5 xl:px-4 2xl:px-5 py-1.5 xl:py-2 2xl:py-2.5 rounded-full bg-gradient-to-r from-[#0799A8] to-[#007C91] text-white font-semibold text-[11px] xl:text-xs 2xl:text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer group whitespace-nowrap"
             >
               <span>Enquire Now</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -375,6 +383,30 @@ export default function Header() {
                     }
                   >
                     Job Assistance
+                  </NavLink>
+
+                  <NavLink
+                    to="/career"
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) =>
+                      `block px-4 py-3 rounded-xl font-semibold text-[15px] ${
+                        isActive ? 'bg-[#0799A8] text-white' : 'text-[#0B3566] hover:bg-[#EAFBFD]'
+                      }`
+                    }
+                  >
+                    Career
+                  </NavLink>
+
+                  <NavLink
+                    to="/collaborate"
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) =>
+                      `block px-4 py-3 rounded-xl font-semibold text-[15px] ${
+                        isActive ? 'bg-[#0799A8] text-white' : 'text-[#0B3566] hover:bg-[#EAFBFD]'
+                      }`
+                    }
+                  >
+                    Collaborate With MAMI
                   </NavLink>
 
                   <NavLink

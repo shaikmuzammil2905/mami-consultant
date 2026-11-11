@@ -1,31 +1,35 @@
 import { useParams, Link } from 'react-router-dom';
-import { MapPin, Clock, Briefcase, CheckCircle2, ArrowRight, MessageCircle } from 'lucide-react';
+import { MapPin, Clock, Briefcase, CheckCircle2, ArrowRight, MessageCircle, GraduationCap } from 'lucide-react';
 import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import CTASection from '../components/CTASection';
+import StatusBadge from '../components/StatusBadge';
 import { jobs } from '../data/jobs';
 import { getWhatsAppUrl } from '../data/siteConfig';
-import { useModal } from '../context/ModalContext';
 
 export default function JobDetails() {
   const { id } = useParams();
   const job = jobs.find((j) => j.id === id);
-  const { openModal } = useModal();
 
   if (!job) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-20 text-center space-y-4">
         <h1 className="text-3xl font-extrabold text-[#0B3566]">Job Opening Not Found</h1>
         <Link
-          to="/jobs"
+          to="/career"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mami-gradient text-white font-semibold text-sm"
         >
-          <span>Explore Job Opportunities</span>
+          <span>Explore Career Opportunities</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     );
   }
+
+  const isClosed = job.status === 'closed';
+  const applyHref = `/career/apply?jobId=${encodeURIComponent(job.id)}&job=${encodeURIComponent(
+    `${job.title} – ${job.country}`
+  )}`;
 
   return (
     <>
@@ -38,28 +42,26 @@ export default function JobDetails() {
         title={job.title}
         subtitle={job.shortDescription}
         breadcrumbs={[
-          { label: 'Job Assistance', to: '/jobs' },
+          { label: 'Career', to: '/career' },
           { label: job.title },
         ]}
       >
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() =>
-              openModal('job', {
-                jobTitle: job.title,
-                country: job.country,
-                title: `Apply: ${job.title}`,
-              })
-            }
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mami-gradient text-white font-semibold text-sm shadow-md cursor-pointer"
-          >
-            <span>Apply Now</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+        <div className="flex flex-wrap items-center gap-3">
+          {isClosed ? (
+            <StatusBadge status="closed" label="Applications Closed" />
+          ) : (
+            <Link
+              to={applyHref}
+              state={{ job }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mami-gradient text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all"
+            >
+              <span>Apply Now</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          )}
 
           <a
-            href={getWhatsAppUrl(`Hello MAMI Career Consultant, I am interested in applying for ${job.title} (${job.location}).`)}
+            href={getWhatsAppUrl(`Hello MAMI Career Consultant, I am interested in ${job.title} (${job.location}).`)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-[#8AD7E0] text-[#007C91] font-semibold text-sm hover:bg-[#EAFBFD]"
@@ -84,10 +86,29 @@ export default function JobDetails() {
                 <span className="inline-flex items-center gap-1.5 font-semibold">
                   <Briefcase className="w-4 h-4 text-[#0799A8]" /> {job.employmentType}
                 </span>
+                {job.qualification && (
+                  <span className="inline-flex items-center gap-1.5 font-semibold">
+                    <GraduationCap className="w-4 h-4 text-[#0799A8]" /> {job.qualification}
+                  </span>
+                )}
               </div>
 
               <h2 className="text-xl font-extrabold text-[#0B3566]">Role Overview</h2>
               <p className="text-sm sm:text-base text-[#173B63]/90 leading-relaxed">{job.fullDescription}</p>
+
+              {job.responsibilities?.length > 0 && (
+                <>
+                  <h3 className="text-lg font-bold text-[#0B3566] pt-2">Key Responsibilities</h3>
+                  <ul className="space-y-2">
+                    {job.responsibilities.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-[#173B63]">
+                        <CheckCircle2 className="w-4 h-4 text-[#0799A8] shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
 
               <h3 className="text-lg font-bold text-[#0B3566] pt-2">Candidate Requirements</h3>
               <ul className="space-y-2">
@@ -117,19 +138,20 @@ export default function JobDetails() {
               <p className="text-xs sm:text-sm text-[#60758A]">
                 Don’t have your {job.authority} license yet? MAMI assists eligible candidates with licensing, DataFlow verification, and CV optimization.
               </p>
-              <button
-                type="button"
-                onClick={() =>
-                  openModal('job', {
-                    jobTitle: job.title,
-                    country: job.country,
-                    title: `Apply: ${job.title}`,
-                  })
-                }
-                className="w-full py-3 rounded-full bg-mami-gradient text-white font-semibold text-sm cursor-pointer"
-              >
-                Submit Application
-              </button>
+              {isClosed ? (
+                <div className="text-center py-2">
+                  <StatusBadge status="closed" label="Applications Closed" />
+                </div>
+              ) : (
+                <Link
+                  to={applyHref}
+                  state={{ job }}
+                  className="w-full py-3 rounded-full bg-mami-gradient text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-md"
+                >
+                  <span>Apply for This Position</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              )}
               <Link
                 to="/services/healthcare-licensing"
                 className="block text-center text-xs font-semibold text-[#0799A8] hover:underline"
@@ -145,4 +167,3 @@ export default function JobDetails() {
     </>
   );
 }
-

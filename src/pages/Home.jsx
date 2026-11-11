@@ -3,6 +3,7 @@ import ServiceGrid from '../components/ServiceGrid';
 import AboutSection from '../components/AboutSection';
 import GlobalOpportunities from '../components/GlobalOpportunities';
 import TrainingSection from '../components/TrainingSection';
+import CareersPartnershipsSection from '../components/CareersPartnershipsSection';
 import CertificationsSection from '../components/CertificationsSection';
 import FounderGallerySection from '../components/FounderGallerySection';
 import TestimonialSlider from '../components/TestimonialSlider';
@@ -21,6 +22,7 @@ export default function Home() {
       <ServiceGrid compact={true} />
       <GlobalOpportunities />
       <TrainingSection />
+      <CareersPartnershipsSection />
       <CertificationsSection />
       <FounderGallerySection />
       <TestimonialSlider />

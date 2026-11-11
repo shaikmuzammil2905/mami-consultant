@@ -1,3 +1,12 @@
+export const jobCategories = [
+  'Doctor',
+  'Nurse',
+  'Physiotherapist',
+  'Allied Healthcare Professional',
+  'Hospital Staff',
+  'Healthcare Administration',
+];
+
 export const jobs = [
   {
     id: 'physiotherapist-dubai-uae',
@@ -6,8 +15,12 @@ export const jobs = [
     country: 'UAE',
     location: 'Dubai, UAE',
     experience: '2–5 Years',
+    qualification: 'BPT / MPT (Recognized Physiotherapy Degree)',
     employmentType: 'Full-Time',
     authority: 'DHA Licensed / Eligible',
+    status: 'active',
+    createdDate: '2026-10-18',
+    closingDate: '2026-12-31',
     shortDescription:
       'Reputed outpatient rehabilitation & orthopedic center in Dubai seeking DHA-licensed or DHA-eligible physiotherapists.',
     fullDescription:
@@ -18,6 +31,11 @@ export const jobs = [
       'DHA License or DHA Eligibility Letter (MAMI assists eligible candidates)',
       'Strong patient communication and clinical documentation skills',
     ],
+    responsibilities: [
+      'Conduct comprehensive musculoskeletal and neurological assessments',
+      'Design evidence-based treatment & rehabilitation plans',
+      'Maintain accurate patient progress documentation per DHA standards',
+    ],
     benefits: [
       'Tax-free salary package with performance incentives',
       'Employment visa, medical insurance, and annual leave',
@@ -26,13 +44,17 @@ export const jobs = [
   },
   {
     id: 'registered-nurse-abu-dhabi',
-    title: 'Registered Nurse – ICU / Medical-Surgical',
+    title: 'Senior Staff Nurse – ICU / Acute Care',
     profession: 'Nurse',
     country: 'UAE',
     location: 'Abu Dhabi, UAE',
     experience: '2+ Years',
+    qualification: 'B.Sc Nursing / GNM with Active Registration',
     employmentType: 'Full-Time',
     authority: 'DOH / HAAD Eligible',
+    status: 'active',
+    createdDate: '2026-10-20',
+    closingDate: '2026-12-31',
     shortDescription:
       'Tertiary private hospital in Abu Dhabi hiring DOH/HAAD registered or exam-passed nurses across ICU and acute care wards.',
     fullDescription:
@@ -42,6 +64,11 @@ export const jobs = [
       'Minimum 2 years hospital experience in relevant unit',
       'DOH / HAAD License or Exam Pass Letter',
       'BLS / ACLS certification preferred',
+    ],
+    responsibilities: [
+      'Deliver safe, patient-centered critical and acute nursing care',
+      'Coordinate multidisciplinary rounds and medication administration',
+      'Uphold infection control and clinical safety protocols',
     ],
     benefits: [
       'Competitive tax-free remuneration & accommodation allowance',
@@ -56,8 +83,12 @@ export const jobs = [
     country: 'Saudi Arabia',
     location: 'Riyadh, Saudi Arabia',
     experience: '3+ Years',
+    qualification: 'MBBS or Equivalent Medical Degree',
     employmentType: 'Full-Time',
     authority: 'SCFHS Classified',
+    status: 'active',
+    createdDate: '2026-10-22',
+    closingDate: '2026-12-31',
     shortDescription:
       'Leading polyclinic group in Riyadh seeking General Practitioners with SCFHS classification or Prometric readiness.',
     fullDescription:
@@ -66,6 +97,11 @@ export const jobs = [
       'MBBS or equivalent medical degree from a recognized university',
       '3+ years clinical experience post-internship',
       'SCFHS classification or eligibility for Saudi Prometric',
+    ],
+    responsibilities: [
+      'Evaluate outpatient medical consultations and acute care visits',
+      'Order and interpret diagnostic investigations',
+      'Collaborate with specialty consultants for referral continuity',
     ],
     benefits: [
       'Attractive tax-free compensation package',
@@ -80,8 +116,12 @@ export const jobs = [
     country: 'Ireland',
     location: 'Dublin & Cork, Ireland',
     experience: '1–4 Years',
+    qualification: 'B.Sc / Diploma in Nursing + OET / IELTS',
     employmentType: 'Full-Time',
     authority: 'NMBI Decision Letter / Pin',
+    status: 'active',
+    createdDate: '2026-10-25',
+    closingDate: '2026-12-31',
     shortDescription:
       'Irish healthcare employers hiring NMBI-registered or Decision Letter nurses with OET/IELTS completion.',
     fullDescription:
@@ -90,6 +130,10 @@ export const jobs = [
       'B.Sc / Diploma in Nursing with current registration',
       'NMBI Decision Letter or active NMBI Pin',
       'Required OET / IELTS score',
+    ],
+    responsibilities: [
+      'Provide holistic nursing care in acute wards and rehabilitation settings',
+      'Maintain clinical care plans aligned with HIQA / HSE standards',
     ],
     benefits: [
       'HSE-aligned pay scale and shift allowances',
@@ -100,12 +144,16 @@ export const jobs = [
   {
     id: 'allied-health-radiographer-qatar',
     title: 'Medical Imaging / Allied Health Specialist',
-    profession: 'Allied Healthcare',
+    profession: 'Allied Healthcare Professional',
     country: 'Qatar',
     location: 'Doha, Qatar',
     experience: '3+ Years',
+    qualification: 'B.Sc Radiography / Allied Health Sciences',
     employmentType: 'Full-Time',
     authority: 'DHP Qatar Eligible',
+    status: 'active',
+    createdDate: '2026-10-28',
+    closingDate: '2026-12-31',
     shortDescription:
       'Diagnostic & specialty healthcare center in Doha recruiting experienced allied health and radiography specialists.',
     fullDescription:
@@ -114,6 +162,10 @@ export const jobs = [
       'Bachelor’s degree in Radiography / Allied Health Sciences',
       'Minimum 3 years hospital diagnostic experience',
       'Qatar Prometric & DataFlow readiness',
+    ],
+    responsibilities: [
+      'Perform high-quality diagnostic imaging procedures safely',
+      'Ensure radiation safety and equipment calibration compliance',
     ],
     benefits: [
       'Tax-free salary and housing support',
@@ -128,8 +180,12 @@ export const jobs = [
     country: 'UK',
     location: 'London & Manchester, UK',
     experience: '2+ Years',
+    qualification: 'BPT / MPT Eligible for HCPC UK',
     employmentType: 'Full-Time',
     authority: 'HCPC Registered / In Process',
+    status: 'active',
+    createdDate: '2026-11-01',
+    closingDate: '2026-12-31',
     shortDescription:
       'UK rehabilitation providers welcoming HCPC-registered or HCPC-applicant physiotherapists with international clinical experience.',
     fullDescription:
@@ -139,11 +195,76 @@ export const jobs = [
       'Strong clinical reasoning in MSK, Ortho, or Neuro rehab',
       'English proficiency and UK-ready CV',
     ],
+    responsibilities: [
+      'Manage outpatient musculoskeletal & neurological caseloads',
+      'Lead functional mobility rehabilitation and outcome tracking',
+    ],
     benefits: [
       'Competitive UK Band 5 / Band 6 equivalent salary',
       'Skilled Worker Health & Care Visa sponsorship',
       'Structured CPD & mentorship',
     ],
   },
+  {
+    id: 'healthcare-coordinator-hyderabad-india',
+    title: 'Healthcare Operations & Patient Coordinator',
+    profession: 'Healthcare Administration',
+    country: 'India',
+    location: 'Hyderabad, India',
+    experience: '1–3 Years',
+    qualification: 'BHA / MHA / Allied Health / Nursing Graduate',
+    employmentType: 'Full-Time',
+    authority: 'Hospital & Clinical Operations',
+    status: 'active',
+    createdDate: '2026-11-04',
+    closingDate: '2026-12-31',
+    shortDescription:
+      'Multi-specialty hospital network in Hyderabad seeking Healthcare Coordinators & Administrative Staff for international patient & clinical desks.',
+    fullDescription:
+      'Coordinate clinical schedules, patient onboarding, insurance documentation, and quality compliance across outpatient and inpatient departments.',
+    requirements: [
+      'Degree in Hospital Administration, Nursing, or Allied Health',
+      '1–3 years hospital coordination or front-office operations experience',
+      'Strong English & regional communication skills',
+    ],
+    responsibilities: [
+      'Manage clinical workflow coordination and patient support desks',
+      'Oversee hospital documentation audits and quality records',
+    ],
+    benefits: [
+      'Competitive Indian hospital compensation & growth pathway',
+      'Health coverage and professional leadership training',
+    ],
+  },
+  {
+    id: 'hospital-support-technician-oman',
+    title: 'OT / ICU Support Technician & Hospital Staff',
+    profession: 'Hospital Staff',
+    country: 'Oman',
+    location: 'Muscat, Oman',
+    experience: '2+ Years',
+    qualification: 'Diploma / B.Sc in OT / Anesthesia / Medical Technology',
+    employmentType: 'Full-Time',
+    authority: 'Oman Prometric / MOH Ready',
+    status: 'active',
+    createdDate: '2026-11-06',
+    closingDate: '2026-12-31',
+    shortDescription:
+      'Private surgical hospital in Muscat hiring experienced OT/ICU support technicians and clinical hospital staff.',
+    fullDescription:
+      'Support surgical theater readiness, sterilization compliance, and ICU bedside equipment monitoring alongside consultant surgeons and critical care nurses.',
+    requirements: [
+      'Recognized Diploma/Degree in OT/ICU Technology or Hospital Clinical Support',
+      'Minimum 2 years acute hospital experience',
+      'Valid passport and DataFlow verification readiness',
+    ],
+    responsibilities: [
+      'Prepare operating room sterile instruments and monitoring setups',
+      'Assist nursing and anesthesia teams during clinical procedures',
+    ],
+    benefits: [
+      'Tax-free salary, shared accommodation, and medical insurance',
+      'Annual paid vacation with return ticket',
+    ],
+  },
 ];
-

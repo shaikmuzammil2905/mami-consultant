@@ -25,6 +25,10 @@ const Training = lazy(() => import('./pages/Training'));
 const TrainingCourseDetails = lazy(() => import('./pages/TrainingCourseDetails'));
 const Jobs = lazy(() => import('./pages/Jobs'));
 const JobDetails = lazy(() => import('./pages/JobDetails'));
+const Career = lazy(() => import('./pages/Career'));
+const CareerApply = lazy(() => import('./pages/CareerApply'));
+const Collaborate = lazy(() => import('./pages/Collaborate'));
+const CollaborateRequirement = lazy(() => import('./pages/CollaborateRequirement'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Enquiry = lazy(() => import('./pages/Enquiry'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -97,6 +101,10 @@ function AppShell() {
                 <Route path="/training/:courseId" element={<PageTransitionWrapper><TrainingCourseDetails /></PageTransitionWrapper>} />
                 <Route path="/jobs" element={<PageTransitionWrapper><Jobs /></PageTransitionWrapper>} />
                 <Route path="/jobs/:id" element={<PageTransitionWrapper><JobDetails /></PageTransitionWrapper>} />
+                <Route path="/career" element={<PageTransitionWrapper><Career /></PageTransitionWrapper>} />
+                <Route path="/career/apply" element={<PageTransitionWrapper><CareerApply /></PageTransitionWrapper>} />
+                <Route path="/collaborate" element={<PageTransitionWrapper><Collaborate /></PageTransitionWrapper>} />
+                <Route path="/collaborate/requirement" element={<PageTransitionWrapper><CollaborateRequirement /></PageTransitionWrapper>} />
                 <Route path="/contact" element={<PageTransitionWrapper><Contact /></PageTransitionWrapper>} />
                 <Route path="/enquiry" element={<PageTransitionWrapper><Enquiry /></PageTransitionWrapper>} />
                 <Route path="*" element={<PageTransitionWrapper><NotFound /></PageTransitionWrapper>} />

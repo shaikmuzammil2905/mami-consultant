@@ -56,6 +56,8 @@ export default function Footer() {
                 { label: 'Our Services', to: '/services' },
                 { label: 'Training', to: '/training' },
                 { label: 'Job Assistance', to: '/jobs' },
+                { label: 'Career', to: '/career' },
+                { label: 'Collaborate With MAMI', to: '/collaborate' },
                 { label: 'Contact Us', to: '/contact' },
               ].map((item) => (
                 <li key={item.to}>
