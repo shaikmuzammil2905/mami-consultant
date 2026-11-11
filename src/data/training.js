@@ -1,4 +1,7 @@
-import heroDesktopImg from '../assets/hero-desktop.png';
+import serviceTrainingImg from '../assets/service-training-banner.png';
+import serviceMockTestsImg from '../assets/service-mock-tests.png';
+import serviceCounsellingImg from '../assets/service-counselling-banner.png';
+import serviceLicensingImg from '../assets/service-licensing.png';
 import aboutSkylineImg from '../assets/about-doctor-skyline.jpg';
 import recruitmentImg from '../assets/service-recruitment.jpg';
 
@@ -7,7 +10,7 @@ export const trainingCourses = [
     id: 'dha-exam-prep',
     title: 'DHA Exam Preparation Program',
     badge: 'Dubai Health Authority',
-    image: heroDesktopImg,
+    image: serviceTrainingImg,
     overview:
       'Focused online coaching for doctors, nurses, and physiotherapists preparing for the Dubai Health Authority (DHA) Prometric examination.',
     whoCanJoin: 'Physiotherapists (BPT/MPT), Registered Nurses (B.Sc/GNM), and General Practitioners / Specialists.',
@@ -82,7 +85,7 @@ export const trainingCourses = [
     id: 'gcc-prometric-combo',
     title: 'GCC Prometric (SCFHS / Oman / Qatar)',
     badge: 'Saudi • Oman • Qatar',
-    image: heroDesktopImg,
+    image: serviceLicensingImg,
     overview:
       'Unified Prometric preparation designed for Saudi SCFHS, Oman OMSB, and Qatar DHP healthcare licensing examinations.',
     whoCanJoin: 'Clinicians applying across Saudi Arabia, Oman, and Qatar.',
@@ -107,7 +110,7 @@ export const trainingCourses = [
     id: 'mock-tests-series',
     title: 'Mock Examinations & Practice Test Series',
     badge: 'Practice. Prepare. Excel.',
-    image: recruitmentImg,
+    image: serviceMockTestsImg,
     overview:
       'Self-paced and mentor-reviewed computer-based mock examinations to benchmark your readiness before booking your official test.',
     whoCanJoin: 'Self-studying healthcare professionals seeking realistic exam simulation.',
@@ -132,7 +135,7 @@ export const trainingCourses = [
     id: 'interview-career-coaching',
     title: 'International Interview & Career Coaching',
     badge: 'Hospital & Clinic Readiness',
-    image: aboutSkylineImg,
+    image: serviceCounsellingImg,
     overview:
       'One-on-one interview coaching, clinical scenario roleplay, and international healthcare CV workshops for GCC, UK & Ireland employers.',
     whoCanJoin: 'Licensed or license-eligible Doctors, Nurses, Physiotherapists & Allied Health staff.',

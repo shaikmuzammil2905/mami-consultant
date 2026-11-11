@@ -7,9 +7,13 @@ import {
   FileCheck,
   Users,
 } from 'lucide-react';
-import aboutSkylineImg from '../assets/about-doctor-skyline.jpg';
-import recruitmentImg from '../assets/service-recruitment.jpg';
-import heroDesktopImg from '../assets/hero-desktop.png';
+import serviceLicensingImg from '../assets/service-licensing.png';
+import serviceRegistrationImg from '../assets/service-registration.png';
+import serviceTrainingImg from '../assets/service-training-banner.png';
+import serviceMockTestsImg from '../assets/service-mock-tests.png';
+import serviceRecruitmentImg from '../assets/service-recruitment-banner.png';
+import serviceDocumentationImg from '../assets/service-documentation-banner.png';
+import serviceCounsellingImg from '../assets/service-counselling-banner.png';
 
 export const licensingAuthorities = [
   {
@@ -85,7 +89,7 @@ export const services = [
     shortDescription:
       'End-to-end healthcare licensing support for DHA Dubai, DOH Abu Dhabi, MOH UAE, SCFHS Saudi, Oman Prometric, Qatar, UK & Ireland.',
     icon: ShieldPlus,
-    image: aboutSkylineImg,
+    image: serviceLicensingImg,
     route: '/services/healthcare-licensing',
     pricingNote: 'Pricing varies by authority, profession, and package. Contact us for current pricing.',
     detailedDescription:
@@ -122,7 +126,7 @@ export const services = [
     shortDescription:
       'Structured global registration guidance across UK, Ireland, UAE, Saudi Arabia, Oman, Qatar, and other GCC destinations.',
     icon: Globe,
-    image: aboutSkylineImg,
+    image: serviceRegistrationImg,
     route: '/services/international-registration',
     pricingNote: 'Pricing varies by destination country and regulatory council.',
     detailedDescription:
@@ -159,7 +163,7 @@ export const services = [
     shortDescription:
       'Expert-led live online training sessions covering DHA, DOH, MOH, and GCC Prometric healthcare licensing examinations.',
     icon: GraduationCap,
-    image: heroDesktopImg,
+    image: serviceTrainingImg,
     route: '/services/training',
     pricingNote: 'Contact us for current pricing across individual & combo training packages.',
     detailedDescription:
@@ -193,7 +197,7 @@ export const services = [
     shortDescription:
       'Realistic computer-based mock examinations, practice question banks, and international hospital interview coaching.',
     icon: ClipboardCheck,
-    image: recruitmentImg,
+    image: serviceMockTestsImg,
     route: '/services/mock-tests',
     pricingNote: 'Pricing varies by test series and interview coaching package.',
     detailedDescription:
@@ -227,7 +231,7 @@ export const services = [
     shortDescription:
       'Targeted job assistance, international healthcare CV building, application tracking, and interview coordination across UAE, GCC, UK & Ireland.',
     icon: BriefcaseBusiness,
-    image: recruitmentImg,
+    image: serviceRecruitmentImg,
     route: '/services/recruitment',
     pricingNote: 'Contact us for current job assistance & career placement support details.',
     detailedDescription:
@@ -262,7 +266,7 @@ export const services = [
     shortDescription:
       'Thorough document review, DataFlow PSV coordination, attestation guidance, and error-free regulatory file preparation.',
     icon: FileCheck,
-    image: aboutSkylineImg,
+    image: serviceDocumentationImg,
     route: '/services/documentation',
     pricingNote: 'Pricing varies by number of documents, authority, and verification scope.',
     detailedDescription:
@@ -299,7 +303,7 @@ export const services = [
     shortDescription:
       'Personalized one-on-one guidance on country selection, licensing pathways, timelines, and long-term global career planning.',
     icon: Users,
-    image: recruitmentImg,
+    image: serviceCounsellingImg,
     route: '/services/career-counselling',
     pricingNote: 'Contact us to book your personalized career counselling session.',
     detailedDescription:

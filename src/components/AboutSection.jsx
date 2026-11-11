@@ -21,7 +21,6 @@ export default function AboutSection() {
               <img
                 src={aboutImg}
                 alt="Healthcare professional looking toward international city skyline and airplane"
-                loading="lazy"
                 className="w-full aspect-[16/10] lg:aspect-[4/3] object-cover hover:scale-[1.03] transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#007C91]/20 via-transparent to-transparent pointer-events-none" />

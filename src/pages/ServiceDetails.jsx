@@ -79,11 +79,11 @@ export default function ServiceDetails({ serviceIdProp }) {
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 space-y-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-6">
-              <div className="rounded-3xl overflow-hidden shadow-xl border border-[#CFEFF3]">
+              <div className="rounded-3xl overflow-hidden bg-gradient-to-b from-[#EAFBFD] to-white shadow-xl border-2 border-[#CFEFF3] p-2.5 sm:p-3">
                 <img
                   src={service.image}
                   alt={service.title}
-                  className="w-full aspect-[16/10] object-cover"
+                  className="w-full h-auto object-contain rounded-2xl"
                 />
               </div>
             </div>

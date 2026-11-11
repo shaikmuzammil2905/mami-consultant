@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Plane } from 'lucide-react';
 import { countries } from '../data/countries';
 import { CountryFlag } from './CountryFlags';
+import globalBgImg from '../assets/global-opportunities-bg.png';
 
 export default function GlobalOpportunities() {
   return (
@@ -11,67 +12,120 @@ export default function GlobalOpportunities() {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#EAFBFD] via-[#F2FCFD] to-[#D8F3F7] border border-[#CFEFF3] px-5 py-6 sm:px-8 sm:py-7 shadow-sm"
+          className="relative overflow-hidden rounded-3xl border-2 border-[#BFEBF0] shadow-[0_18px_46px_-14px_rgba(7,153,168,0.24)] bg-[#E7F7FD]"
         >
-          {/* Decorative World Map Silhouette SVG */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            {/* Left Map & Plane Motif */}
-            <div className="relative flex items-center justify-center w-full lg:w-[230px] shrink-0">
-              <svg
-                viewBox="0 0 260 110"
-                className="w-48 sm:w-56 h-auto text-[#4DBBC7]/55"
-                fill="currentColor"
+          {/* ==================== DESKTOP / TABLET VIEW (Grand Full-Bleed Background) ==================== */}
+          <div className="hidden md:flex relative min-h-[215px] lg:min-h-[245px] items-center">
+            <img
+              src={globalBgImg}
+              alt="Global healthcare opportunities across UAE, GCC, UK, Ireland and worldwide"
+              className="absolute inset-0 w-full h-full object-cover object-left pointer-events-none select-none"
+            />
+            {/* Soft readability sheen on right side only so left globe & landmarks stay crystal sharp */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-[#EAFBFD]/65 to-[#E6F8FE]/90 pointer-events-none"
+            />
+
+            <motion.div
+              aria-hidden="true"
+              animate={{ x: [-6, 10, -6], y: [4, -5, 4] }}
+              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute top-6 left-[27%] text-[#007C91]/55 pointer-events-none"
+            >
+              <Plane className="w-5 h-5 -rotate-12" />
+            </motion.div>
+
+            <div className="relative z-10 w-full grid grid-cols-12 items-center px-6 lg:px-8 py-6 gap-4">
+              {/* Open Left Showcase Space for Globe, Airplane & Landmarks */}
+              <div className="col-span-4 lg:col-span-4" aria-hidden="true" />
+
+              {/* Headline + Flags on Bright Dotted World Map Area */}
+              <div className="col-span-8 lg:col-span-8 flex flex-col xl:flex-row items-center justify-between gap-5 pl-2">
+                <div className="text-center xl:text-left">
+                  <h2 className="text-2xl lg:text-[27px] font-extrabold text-[#0B3566] leading-snug">
+                    Global Opportunities in
+                  </h2>
+                  <p className="text-lg lg:text-xl font-extrabold text-[#0799A8] mt-0.5">
+                    UAE • GCC • UK • Ireland &amp; More
+                  </p>
+                  <p className="text-xs lg:text-sm text-[#173B63]/85 mt-1 font-medium">
+                    Explore international registration &amp; licensing pathways across top destinations.
+                  </p>
+                </div>
+
+                {/* Circular Country Flags */}
+                <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-2.5 lg:gap-3 shrink-0 bg-white/70 backdrop-blur-xs rounded-2xl px-3.5 py-2.5 border border-white/90 shadow-xs">
+                  {countries.map((country, idx) => (
+                    <motion.div
+                      key={country.id}
+                      initial={{ opacity: 0, scale: 0.85 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, amount: 0.05 }}
+                      transition={{ duration: 0.35, delay: idx * 0.05 }}
+                    >
+                      <Link
+                        to={`/services/international-registration#${country.id}`}
+                        title={`${country.name} — ${country.authorities[0]}`}
+                        className="group relative flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-white hover:-translate-y-1 transition-all"
+                      >
+                        <CountryFlag code={country.code} className="w-9 h-9 lg:w-10 lg:h-10" />
+                        <span className="text-[11px] font-bold text-[#0B3566] group-hover:text-[#0799A8] whitespace-nowrap">
+                          {country.shortName}
+                        </span>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ==================== MOBILE VIEW (Grand Visual Header + Frosted Country Panel) ==================== */}
+          <div className="block md:hidden">
+            {/* Top Grand Visual Artwork */}
+            <div className="relative h-44 overflow-hidden">
+              <img
+                src={globalBgImg}
+                alt="Global healthcare opportunities worldwide"
+                className="w-full h-full object-cover object-left scale-[1.03]"
+              />
+              <div
                 aria-hidden="true"
-              >
-                {/* Stylized subtle world continents silhouette */}
-                <path d="M26 24c8-6 22-5 30 3 6 6 2 15-4 20-7 5-15 3-20 9-4 5-2 15-9 18-7 3-13-7-12-14 1-11 6-29 15-36zm52 40c6-4 14 1 17 8 4 8 0 18-7 25-6 6-14 3-15-5-1-9-2-23 5-28zm40-44c16-8 38-6 52 4 8 6 14 17 10 26-5 10-18 12-27 18-8 5-10 18-19 20-10 2-18-8-18-17 0-9 5-16 2-24-3-8-10-21 0-27zm68 12c14-6 33-3 44 8 8 8 11 21 5 30-5 7-17 6-24 12-5 4-6 14-13 14-8 0-12-9-13-16-2-12-10-42 1-48zm48 48c7-3 15 1 17 8 2 6-3 13-10 14-7 1-13-5-13-11 0-5 2-9 6-11z" />
-              </svg>
-              <motion.div
-                animate={{ x: [-4, 8, -4], y: [3, -5, 3] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute right-4 sm:right-2 top-3 text-[#007C91]"
-              >
-                <Plane className="w-6 h-6 -rotate-12" />
-              </motion.div>
+                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#E5F7FD]"
+              />
             </div>
 
-            {/* Center Headline */}
-            <div className="text-center lg:text-left">
-              <h2 className="text-xl sm:text-2xl lg:text-[26px] font-extrabold text-[#0B3566] leading-snug">
-                Global Opportunities in
-              </h2>
-              <p className="text-base sm:text-xl font-extrabold text-[#0799A8] mt-0.5">
-                UAE • GCC • UK • Ireland &amp; More
-              </p>
-              <p className="text-xs sm:text-sm text-[#60758A] mt-1">
-                Explore international registration &amp; licensing pathways across top destinations.
-              </p>
-            </div>
+            {/* Bottom Seamless Content & Flags */}
+            <div className="relative z-10 -mt-5 px-4 pb-5 text-center space-y-4">
+              <div>
+                <h2 className="text-xl font-extrabold text-[#0B3566] leading-snug">
+                  Global Opportunities in
+                </h2>
+                <p className="text-[15px] font-extrabold text-[#0799A8] mt-0.5">
+                  UAE • GCC • UK • Ireland &amp; More
+                </p>
+                <p className="text-xs text-[#173B63]/85 mt-1">
+                  Explore international registration &amp; licensing pathways across top destinations.
+                </p>
+              </div>
 
-            {/* Right Animated Country Flags */}
-            <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-2.5 sm:gap-3 shrink-0">
-              {countries.map((country, idx) => (
-                <motion.div
-                  key={country.id}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, amount: 0.05 }}
-                  transition={{ duration: 0.35, delay: idx * 0.05 }}
-                >
+              <div className="grid grid-cols-3 gap-2.5 bg-white/80 backdrop-blur-xs rounded-2xl p-3 border border-white shadow-xs">
+                {countries.map((country) => (
                   <Link
+                    key={country.id}
                     to={`/services/international-registration#${country.id}`}
-                    title={`${country.name} — ${country.authorities[0]}`}
-                    className="group relative flex flex-col items-center gap-1 p-1 rounded-2xl hover:bg-white/80 hover:-translate-y-1 transition-all"
+                    className="flex flex-col items-center gap-1 p-1.5 rounded-xl hover:bg-white transition-colors"
                   >
-                    <CountryFlag code={country.code} className="w-9 h-9 sm:w-10 sm:h-10" />
-                    <span className="text-[11px] font-bold text-[#0B3566] group-hover:text-[#0799A8] whitespace-nowrap">
+                    <CountryFlag code={country.code} className="w-9 h-9" />
+                    <span className="text-[11px] font-bold text-[#0B3566] leading-tight">
                       {country.shortName}
                     </span>
                   </Link>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>
@@ -79,4 +133,3 @@ export default function GlobalOpportunities() {
     </section>
   );
 }
-

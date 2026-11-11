@@ -4,7 +4,9 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
 import CTASection from '../components/CTASection';
+import ServiceVisualShowcase from '../components/ServiceVisualShowcase';
 import { siteConfig } from '../data/siteConfig';
+import { services } from '../data/services';
 import { useModal } from '../context/ModalContext';
 
 const counsellingPillars = [
@@ -18,6 +20,7 @@ const counsellingPillars = [
 
 export default function CareerCounselling() {
   const { openModal } = useModal();
+  const counsellingService = services.find((s) => s.id === 'career-counselling');
 
   return (
     <>
@@ -45,11 +48,16 @@ export default function CareerCounselling() {
       </PageHero>
 
       <section className="py-12 sm:py-16 bg-white">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <SectionHeading
-            title="What We Cover in Your Session"
-            subtitle="Six pillars of clarity before you take your next international career step."
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 space-y-10">
+          <ServiceVisualShowcase
+            image={counsellingService.image}
+            alt="Career Counselling — Plan Your Global Career"
           />
+          <div>
+            <SectionHeading
+              title="What We Cover in Your Session"
+              subtitle="Six pillars of clarity before you take your next international career step."
+            />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {counsellingPillars.map((item, idx) => {
@@ -88,6 +96,7 @@ export default function CareerCounselling() {
               <span>Book Career Counselling</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+          </div>
           </div>
         </div>
       </section>

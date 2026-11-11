@@ -4,12 +4,15 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
 import CTASection from '../components/CTASection';
+import ServiceVisualShowcase from '../components/ServiceVisualShowcase';
 import { CountryFlag } from '../components/CountryFlags';
 import { countries, globalRoadmapSteps } from '../data/countries';
+import { services } from '../data/services';
 import { useModal } from '../context/ModalContext';
 
 export default function InternationalRegistration() {
   const { openModal } = useModal();
+  const regService = services.find((s) => s.id === 'international-registration');
 
   return (
     <>
@@ -29,11 +32,16 @@ export default function InternationalRegistration() {
 
       {/* Global Career Roadmap */}
       <section className="py-12 bg-white">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <SectionHeading
-            title="Your Global Career Roadmap"
-            subtitle="Four clear milestones from profile assessment to international healthcare registration."
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 space-y-10">
+          <ServiceVisualShowcase
+            image={regService.image}
+            alt="International Registration Support — UK, Ireland & Global Guidance"
           />
+          <div>
+            <SectionHeading
+              title="Your Global Career Roadmap"
+              subtitle="Four clear milestones from profile assessment to international healthcare registration."
+            />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {globalRoadmapSteps.map((item, idx) => (
               <motion.div
@@ -51,6 +59,7 @@ export default function InternationalRegistration() {
                 <p className="text-xs sm:text-sm text-[#60758A] mt-2 leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
+          </div>
           </div>
         </div>
       </section>

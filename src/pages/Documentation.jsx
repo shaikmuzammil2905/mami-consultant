@@ -95,11 +95,11 @@ export default function Documentation() {
           </div>
 
           <div className="lg:col-span-6">
-            <div className="rounded-3xl overflow-hidden shadow-xl border border-[#CFEFF3]">
+            <div className="rounded-3xl overflow-hidden bg-gradient-to-b from-[#EAFBFD] to-white shadow-xl border-2 border-[#CFEFF3] p-2.5 sm:p-3">
               <img
                 src={service.image}
-                alt="Healthcare documentation and verification consultation"
-                className="w-full aspect-[16/10] object-cover"
+                alt="Documentation & Verification Support — Complete Assistance"
+                className="w-full h-auto object-contain rounded-2xl"
               />
             </div>
           </div>
