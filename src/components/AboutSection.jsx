@@ -81,6 +81,15 @@ export default function AboutSection() {
                 </motion.li>
               ))}
             </ul>
+            <div className="mt-5 pt-4 border-t border-[#EAFBFD]">
+              <Link
+                to="/why-choose-us"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0799A8] hover:text-[#007C91] transition-colors group"
+              >
+                <span>Meet Our Founder &amp; Why Choose MAMI</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>

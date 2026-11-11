@@ -14,6 +14,7 @@ import SplashScreen from './components/SplashScreen';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
+const WhyChooseUs = lazy(() => import('./pages/WhyChooseUs'));
 const Services = lazy(() => import('./pages/Services'));
 const Licensing = lazy(() => import('./pages/Licensing'));
 const InternationalRegistration = lazy(() => import('./pages/InternationalRegistration'));
@@ -59,7 +60,13 @@ function PageTransitionWrapper({ children }) {
 function AppShell() {
   const location = useLocation();
   const { modalState, closeModal } = useModal();
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const seen = sessionStorage.getItem('mami_splash_seen');
+    if (seen) return false;
+    sessionStorage.setItem('mami_splash_seen', '1');
+    return true;
+  });
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#173B63]">
@@ -76,6 +83,7 @@ function AppShell() {
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<PageTransitionWrapper><Home /></PageTransitionWrapper>} />
                 <Route path="/about" element={<PageTransitionWrapper><About /></PageTransitionWrapper>} />
+                <Route path="/why-choose-us" element={<PageTransitionWrapper><WhyChooseUs /></PageTransitionWrapper>} />
                 <Route path="/services" element={<PageTransitionWrapper><Services /></PageTransitionWrapper>} />
                 <Route path="/services/healthcare-licensing" element={<PageTransitionWrapper><Licensing /></PageTransitionWrapper>} />
                 <Route path="/services/international-registration" element={<PageTransitionWrapper><InternationalRegistration /></PageTransitionWrapper>} />

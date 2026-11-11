@@ -95,6 +95,10 @@ export default function Header() {
               About Us
             </NavLink>
 
+            <NavLink to="/why-choose-us" className={navLinkClass}>
+              Why Choose Us
+            </NavLink>
+
             {/* Our Services Dropdown */}
             <div
               className="relative"
@@ -287,6 +291,18 @@ export default function Header() {
                     }
                   >
                     About Us
+                  </NavLink>
+
+                  <NavLink
+                    to="/why-choose-us"
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) =>
+                      `block px-4 py-3 rounded-xl font-semibold text-[15px] ${
+                        isActive ? 'bg-[#0799A8] text-white' : 'text-[#0B3566] hover:bg-[#EAFBFD]'
+                      }`
+                    }
+                  >
+                    Why Choose Us
                   </NavLink>
 
                   {/* Services collapsible */}

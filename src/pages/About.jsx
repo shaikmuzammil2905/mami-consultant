@@ -14,6 +14,8 @@ import {
 import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
+import CertificationsSection from '../components/CertificationsSection';
+import FounderGallerySection from '../components/FounderGallerySection';
 import CTASection from '../components/CTASection';
 import aboutImg from '../assets/about-doctor-skyline.jpg';
 import { siteConfig } from '../data/siteConfig';
@@ -188,6 +190,10 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      {/* Certifications & Recognition Gallery */}
+      <CertificationsSection />
+      <FounderGallerySection />
 
       <CTASection />
     </>

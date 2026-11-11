@@ -3,6 +3,8 @@ import ServiceGrid from '../components/ServiceGrid';
 import AboutSection from '../components/AboutSection';
 import GlobalOpportunities from '../components/GlobalOpportunities';
 import TrainingSection from '../components/TrainingSection';
+import CertificationsSection from '../components/CertificationsSection';
+import FounderGallerySection from '../components/FounderGallerySection';
 import TestimonialSlider from '../components/TestimonialSlider';
 import CTASection from '../components/CTASection';
 import PageSEO from '../components/PageSEO';
@@ -19,6 +21,8 @@ export default function Home() {
       <AboutSection />
       <GlobalOpportunities />
       <TrainingSection />
+      <CertificationsSection />
+      <FounderGallerySection />
       <TestimonialSlider />
       <CTASection />
     </>

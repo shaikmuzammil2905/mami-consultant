@@ -52,6 +52,7 @@ export default function Footer() {
               {[
                 { label: 'Home', to: '/' },
                 { label: 'About Us', to: '/about' },
+                { label: 'Why Choose Us', to: '/why-choose-us' },
                 { label: 'Our Services', to: '/services' },
                 { label: 'Training', to: '/training' },
                 { label: 'Job Assistance', to: '/jobs' },
