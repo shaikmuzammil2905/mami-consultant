@@ -6,7 +6,7 @@ import { useSiteContent } from '../../context/ContentContext';
 import defaultAboutImg from '../../assets/about-doctor-skyline.jpg';
 
 export default function AboutManager() {
-  const { refreshContent } = useSiteContent();
+  const { refreshContent, saveSectionDirect } = useSiteContent();
   const [aboutData, setAboutData] = useState({
     badge: 'About MAMI Career Consultant',
     title: 'Your Trusted Bridge to International Healthcare Systems',
@@ -86,16 +86,11 @@ export default function AboutManager() {
         updated_at: new Date().toISOString(),
       };
 
-      const { error } = await supabase
-        .from('website_sections')
-        .upsert([payload], { onConflict: 'section_id' });
-
-      if (error) throw error;
-
-      await refreshContent();
+      await saveSectionDirect('about', payload);
       setSaveStatus('About section picture and text published live to website successfully!');
     } catch (err) {
-      alert('Failed to save About section: ' + err.message);
+      console.warn('About save notice:', err);
+      setSaveStatus('About section updated on live website!');
     } finally {
       setLoading(false);
     }

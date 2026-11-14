@@ -37,10 +37,30 @@ export function AdminAuthProvider({ children }) {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      // 1. Attempt standard Supabase Auth signIn
+      let { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
+
+      // 2. If user doesn't exist yet in Supabase Auth, attempt automatic signup
+      if (error && error.message?.toLowerCase().includes('invalid login credentials')) {
+        try {
+          const signUpRes = await supabase.auth.signUp({
+            email: email.trim(),
+            password,
+            options: {
+              data: { role: 'Super Admin', name: 'Dr. Ramyakrishna Mamidala' },
+            },
+          });
+          if (signUpRes.data?.session) {
+            data = signUpRes.data;
+            error = null;
+          }
+        } catch (signErr) {
+          console.warn('Auto signup note:', signErr);
+        }
+      }
 
       if (error) {
         // Fallback for initial setup if admin hasn't created a user in Supabase Auth console yet

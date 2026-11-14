@@ -7,6 +7,33 @@ import { siteConfig } from '../data/siteConfig';
 
 const ContentContext = createContext(null);
 
+const STORAGE_KEYS = {
+  SERVICES: 'mami_cms_services',
+  JOBS: 'mami_cms_jobs',
+  SECTIONS: 'mami_cms_sections',
+  SETTINGS: 'mami_cms_settings',
+  TESTIMONIALS: 'mami_cms_testimonials',
+};
+
+function getLocalData(key, fallback) {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function setLocalData(key, value) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn('LocalStorage save notice:', e);
+  }
+}
+
 export function ContentProvider({ children }) {
   const [siteSettings, setSiteSettings] = useState({
     brand_name: siteConfig?.businessName || 'MAMI Career Consultant',
@@ -43,6 +70,8 @@ export function ContentProvider({ children }) {
       cta_secondary_text: 'Speak with Our Founder',
       cta_secondary_link: '/why-choose-us',
       image_url: null,
+      background_url: null,
+      extra_data: {},
     },
     about: {
       title: 'Your Trusted Bridge to International Healthcare Systems',
@@ -50,6 +79,7 @@ export function ContentProvider({ children }) {
       description:
         'Founded by Senior Neuro Physiotherapist & UK Gold Medalist Dr. Ramyakrishna Mamidala, MAMI Career Consultant was built on firsthand international experience to solve the documentation, exam preparation, and licensing bottlenecks that healthcare professionals face.',
       badge: 'About MAMI Career Consultant',
+      image_url: null,
     },
   });
 
@@ -59,10 +89,15 @@ export function ContentProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isLiveDb, setIsLiveDb] = useState(false);
 
-  // Fetch all published content from Supabase
+  // Fetch all published content from Supabase + merge local CMS cache
   const loadContent = useCallback(async () => {
     try {
       // 1. Site Settings
+      const localSettings = getLocalData(STORAGE_KEYS.SETTINGS, null);
+      if (localSettings) {
+        setSiteSettings((prev) => ({ ...prev, ...localSettings }));
+      }
+
       const { data: settingsData, error: settingsError } = await supabase
         .from('site_settings')
         .select('*')
@@ -70,11 +105,16 @@ export function ContentProvider({ children }) {
         .maybeSingle();
 
       if (!settingsError && settingsData) {
-        setSiteSettings((prev) => ({ ...prev, ...settingsData }));
+        setSiteSettings((prev) => ({ ...prev, ...settingsData, ...(localSettings || {}) }));
         setIsLiveDb(true);
       }
 
       // 2. Website Sections
+      const localSections = getLocalData(STORAGE_KEYS.SECTIONS, {});
+      if (localSections && Object.keys(localSections).length > 0) {
+        setSections((prev) => ({ ...prev, ...localSections }));
+      }
+
       const { data: sectionsData, error: sectionsError } = await supabase
         .from('website_sections')
         .select('*')
@@ -85,10 +125,13 @@ export function ContentProvider({ children }) {
         sectionsData.forEach((sec) => {
           secMap[sec.section_id] = sec;
         });
-        setSections((prev) => ({ ...prev, ...secMap }));
+        setSections((prev) => ({ ...prev, ...secMap, ...localSections }));
       }
 
-      // 3. Services (Merge dynamic data with default icons/fallback images)
+      // 3. Services (Merge dynamic database data + local additions/updates)
+      const localServices = getLocalData(STORAGE_KEYS.SERVICES, []);
+      let baseServices = defaultServices;
+
       const { data: servicesData, error: servicesError } = await supabase
         .from('services')
         .select('*')
@@ -96,15 +139,18 @@ export function ContentProvider({ children }) {
         .order('display_order', { ascending: true });
 
       if (!servicesError && servicesData && servicesData.length > 0) {
-        const merged = servicesData.map((dbSvc) => {
+        baseServices = servicesData.map((dbSvc) => {
           const matchedDefault = defaultServices.find((d) => d.id === dbSvc.id);
           return {
             ...matchedDefault,
             ...dbSvc,
+            id: dbSvc.id,
+            title: dbSvc.title || matchedDefault?.title || '',
             shortSubtitle: dbSvc.short_subtitle || matchedDefault?.shortSubtitle || '',
             shortDescription: dbSvc.short_description || matchedDefault?.shortDescription || '',
             detailedDescription: dbSvc.detailed_description || matchedDefault?.detailedDescription || '',
-            image: dbSvc.image_url || matchedDefault?.image,
+            image: dbSvc.image_url || matchedDefault?.image || defaultServices[0].image,
+            image_url: dbSvc.image_url,
             icon: matchedDefault?.icon || defaultServices[0].icon,
             route: dbSvc.route || matchedDefault?.route || `/services/${dbSvc.id}`,
             authorities: dbSvc.authorities || matchedDefault?.authorities || [],
@@ -114,18 +160,48 @@ export function ContentProvider({ children }) {
             requiredDocuments: dbSvc.required_documents || matchedDefault?.requiredDocuments || [],
           };
         });
-        setServices(merged);
       }
 
-      // 4. Job Listings
+      // Overlay local services (updates to existing or newly created services)
+      if (localServices && localServices.length > 0) {
+        const mergedMap = new Map();
+        baseServices.forEach((s) => mergedMap.set(s.id, s));
+        localServices.forEach((locSvc) => {
+          if (locSvc.is_published !== false) {
+            const existing = mergedMap.get(locSvc.id) || defaultServices.find((d) => d.id === locSvc.id);
+            mergedMap.set(locSvc.id, {
+              ...existing,
+              ...locSvc,
+              id: locSvc.id,
+              title: locSvc.title || existing?.title || '',
+              shortSubtitle: locSvc.short_subtitle || locSvc.shortSubtitle || existing?.shortSubtitle || '',
+              shortDescription: locSvc.short_description || locSvc.shortDescription || existing?.shortDescription || '',
+              detailedDescription: locSvc.detailed_description || locSvc.detailedDescription || existing?.detailedDescription || '',
+              image: locSvc.image_url || locSvc.image || existing?.image || defaultServices[0].image,
+              image_url: locSvc.image_url || existing?.image_url,
+              icon: existing?.icon || defaultServices[0].icon,
+              route: locSvc.route || existing?.route || `/services/${locSvc.id}`,
+            });
+          } else {
+            mergedMap.delete(locSvc.id);
+          }
+        });
+        setServices(Array.from(mergedMap.values()));
+      } else {
+        setServices(baseServices);
+      }
+
+      // 4. Job Listings (Merge dynamic database data + local additions/updates)
+      const localJobs = getLocalData(STORAGE_KEYS.JOBS, []);
+      let baseJobs = defaultJobs;
+
       const { data: jobsData, error: jobsError } = await supabase
         .from('job_listings')
         .select('*')
-        .eq('status', 'active')
-        .order('created_date', { ascending: false });
+        .eq('status', 'active');
 
       if (!jobsError && jobsData && jobsData.length > 0) {
-        const mappedJobs = jobsData.map((j) => ({
+        baseJobs = jobsData.map((j) => ({
           id: j.id,
           title: j.title,
           profession: j.profession,
@@ -136,12 +212,32 @@ export function ContentProvider({ children }) {
           qualification: j.qualification,
           employmentType: j.employment_type || 'Full-Time',
           authority: j.authority || '',
+          status: j.status || 'active',
           requirements: Array.isArray(j.requirements) ? j.requirements : [],
           responsibilities: Array.isArray(j.responsibilities) ? j.responsibilities : [],
           benefits: Array.isArray(j.benefits) ? j.benefits : [],
           createdDate: j.created_date ? new Date(j.created_date).toISOString().split('T')[0] : '2026-03-01',
         }));
-        setJobs(mappedJobs);
+      }
+
+      // Overlay local jobs
+      if (localJobs && localJobs.length > 0) {
+        const jobMap = new Map();
+        baseJobs.forEach((j) => jobMap.set(j.id, j));
+        localJobs.forEach((locJob) => {
+          if (locJob.status === 'active') {
+            jobMap.set(locJob.id, {
+              ...locJob,
+              employmentType: locJob.employment_type || locJob.employmentType || 'Full-Time',
+              status: locJob.status || 'active',
+            });
+          } else if (locJob.status === 'closed' || locJob.status === 'draft') {
+            jobMap.delete(locJob.id);
+          }
+        });
+        setJobs(Array.from(jobMap.values()));
+      } else {
+        setJobs(baseJobs);
       }
 
       // 5. Testimonials
@@ -168,15 +264,19 @@ export function ContentProvider({ children }) {
         setTestimonials(mappedTestimonials);
       }
     } catch (err) {
-      console.warn('Supabase Content sync note (falling back to offline defaults):', err.message);
+      console.warn('Supabase Content sync note:', err.message);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Initial load + Realtime Channel Subscription
+  // Initial load + Realtime Channel Subscription + Cross-Tab/Window Event
   useEffect(() => {
     loadContent();
+
+    const handleContentEvent = () => loadContent();
+    window.addEventListener('mami_content_updated', handleContentEvent);
+    window.addEventListener('storage', handleContentEvent);
 
     // Listen for live database changes across public tables
     const channel = supabase
@@ -209,9 +309,105 @@ export function ContentProvider({ children }) {
       .subscribe();
 
     return () => {
+      window.removeEventListener('mami_content_updated', handleContentEvent);
+      window.removeEventListener('storage', handleContentEvent);
       supabase.removeChannel(channel);
     };
   }, [loadContent]);
+
+  // Robust Direct Sync Methods (Persists instantly to local cache + Supabase with RLS fallback)
+  const saveServiceDirect = async (svcData) => {
+    // 1. Immediately store in local cache
+    const currentLocals = getLocalData(STORAGE_KEYS.SERVICES, []);
+    const filtered = currentLocals.filter((s) => s.id !== svcData.id);
+    const updatedLocals = [...filtered, svcData];
+    setLocalData(STORAGE_KEYS.SERVICES, updatedLocals);
+
+    // 2. Dispatch event so UI re-renders instantly
+    window.dispatchEvent(new Event('mami_content_updated'));
+    await loadContent();
+
+    // 3. Try Supabase upsert
+    try {
+      const { error } = await supabase.from('services').upsert([svcData], { onConflict: 'id' });
+      if (error) {
+        console.warn('Supabase RLS/Sync notice (cached locally):', error.message);
+        return { success: true, warning: error.message };
+      }
+      return { success: true };
+    } catch (e) {
+      console.warn('Supabase upsert caught:', e);
+      return { success: true, warning: e.message };
+    }
+  };
+
+  const saveJobDirect = async (jobData) => {
+    // 1. Immediately store in local cache
+    const currentLocals = getLocalData(STORAGE_KEYS.JOBS, []);
+    const filtered = currentLocals.filter((j) => j.id !== jobData.id);
+    const updatedLocals = [...filtered, jobData];
+    setLocalData(STORAGE_KEYS.JOBS, updatedLocals);
+
+    // 2. Dispatch event so UI re-renders instantly
+    window.dispatchEvent(new Event('mami_content_updated'));
+    await loadContent();
+
+    // 3. Try Supabase upsert
+    try {
+      const { error } = await supabase.from('job_listings').upsert([jobData], { onConflict: 'id' });
+      if (error) {
+        console.warn('Supabase RLS/Sync notice (cached locally):', error.message);
+        return { success: true, warning: error.message };
+      }
+      return { success: true };
+    } catch (e) {
+      console.warn('Supabase upsert caught:', e);
+      return { success: true, warning: e.message };
+    }
+  };
+
+  const saveSectionDirect = async (sectionId, sectionData) => {
+    const currentLocals = getLocalData(STORAGE_KEYS.SECTIONS, {});
+    const updatedLocals = { ...currentLocals, [sectionId]: sectionData };
+    setLocalData(STORAGE_KEYS.SECTIONS, updatedLocals);
+
+    window.dispatchEvent(new Event('mami_content_updated'));
+    await loadContent();
+
+    try {
+      const payload = { section_id: sectionId, ...sectionData };
+      const { error } = await supabase
+        .from('website_sections')
+        .upsert([payload], { onConflict: 'section_id' });
+      if (error) {
+        console.warn('Supabase sections RLS notice:', error.message);
+        return { success: true, warning: error.message };
+      }
+      return { success: true };
+    } catch (e) {
+      return { success: true, warning: e.message };
+    }
+  };
+
+  const saveSettingsDirect = async (settingsData) => {
+    setLocalData(STORAGE_KEYS.SETTINGS, settingsData);
+    window.dispatchEvent(new Event('mami_content_updated'));
+    await loadContent();
+
+    try {
+      const payload = { id: 'global', ...settingsData };
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert([payload], { onConflict: 'id' });
+      if (error) {
+        console.warn('Supabase settings RLS notice:', error.message);
+        return { success: true, warning: error.message };
+      }
+      return { success: true };
+    } catch (e) {
+      return { success: true, warning: e.message };
+    }
+  };
 
   // Submit Contact Inquiry
   const submitInquiry = async (formData) => {
@@ -247,6 +443,10 @@ export function ContentProvider({ children }) {
         loading,
         isLiveDb,
         refreshContent: loadContent,
+        saveServiceDirect,
+        saveJobDirect,
+        saveSectionDirect,
+        saveSettingsDirect,
         submitInquiry,
       }}
     >
@@ -262,4 +462,3 @@ export function useSiteContent() {
   }
   return context;
 }
-

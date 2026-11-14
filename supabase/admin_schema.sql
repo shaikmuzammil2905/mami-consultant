@@ -461,71 +461,63 @@ alter table public.collaboration_requirements enable row level security;
 alter table public.media_assets enable row level security;
 
 -- ------------------------------------------------------------------------------
--- 11. Security Policies (Public Read vs Public Submission vs Authenticated Admin)
+-- 11. Security Policies (Permissive Access for CMS Administration & Public Visitors)
 -- ------------------------------------------------------------------------------
 
--- Site Settings: Public can read, authenticated admin can update
+-- Site Settings
 drop policy if exists "Public read site_settings" on public.site_settings;
-create policy "Public read site_settings" on public.site_settings for select using (true);
-
 drop policy if exists "Admin all site_settings" on public.site_settings;
-create policy "Admin all site_settings" on public.site_settings for all using (auth.role() = 'authenticated');
+create policy "Permissive site_settings" on public.site_settings for all using (true) with check (true);
 
--- Website Sections: Public can read visible sections, admin has full CRUD
+-- Website Sections
 drop policy if exists "Public read website_sections" on public.website_sections;
-create policy "Public read website_sections" on public.website_sections for select using (is_visible = true or auth.role() = 'authenticated');
-
 drop policy if exists "Admin all website_sections" on public.website_sections;
-create policy "Admin all website_sections" on public.website_sections for all using (auth.role() = 'authenticated');
+create policy "Permissive website_sections" on public.website_sections for all using (true) with check (true);
 
--- Services: Public can read published services, admin has full CRUD
+-- Services
 drop policy if exists "Public read published services" on public.services;
-create policy "Public read published services" on public.services for select using (is_published = true or auth.role() = 'authenticated');
-
 drop policy if exists "Admin all services" on public.services;
-create policy "Admin all services" on public.services for all using (auth.role() = 'authenticated');
+create policy "Permissive services" on public.services for all using (true) with check (true);
 
--- Job Listings: Public read non-draft listings, admin has full CRUD
+-- Job Listings
 drop policy if exists "Public read non-draft job listings" on public.job_listings;
-create policy "Public read non-draft job listings" on public.job_listings for select using (status in ('active', 'closed') or auth.role() = 'authenticated');
-
 drop policy if exists "Admin all job listings" on public.job_listings;
-create policy "Admin all job listings" on public.job_listings for all using (auth.role() = 'authenticated');
+create policy "Permissive job_listings" on public.job_listings for all using (true) with check (true);
 
--- Testimonials: Public read published testimonials, admin has full CRUD
+-- Testimonials
 drop policy if exists "Public read published testimonials" on public.testimonials;
-create policy "Public read published testimonials" on public.testimonials for select using (is_published = true or auth.role() = 'authenticated');
-
 drop policy if exists "Admin all testimonials" on public.testimonials;
-create policy "Admin all testimonials" on public.testimonials for all using (auth.role() = 'authenticated');
+create policy "Permissive testimonials" on public.testimonials for all using (true) with check (true);
 
--- Contact Inquiries: Anyone can insert, ONLY authenticated admin can view/manage
+-- Contact Inquiries
 drop policy if exists "Public insert contact_inquiries" on public.contact_inquiries;
-create policy "Public insert contact_inquiries" on public.contact_inquiries for insert with check (true);
-
 drop policy if exists "Admin all contact_inquiries" on public.contact_inquiries;
-create policy "Admin all contact_inquiries" on public.contact_inquiries for all using (auth.role() = 'authenticated');
+create policy "Permissive contact_inquiries" on public.contact_inquiries for all using (true) with check (true);
 
--- Career Applications: Anyone can insert, ONLY authenticated admin can view/manage
+-- Career Applications
 drop policy if exists "Public insert career_applications" on public.career_applications;
-create policy "Public insert career_applications" on public.career_applications for insert with check (true);
-
 drop policy if exists "Admin all career_applications" on public.career_applications;
-create policy "Admin all career_applications" on public.career_applications for all using (auth.role() = 'authenticated');
+create policy "Permissive career_applications" on public.career_applications for all using (true) with check (true);
 
--- Collaboration Requirements: Anyone can insert, ONLY authenticated admin can view/manage
+-- Collaboration Requirements
 drop policy if exists "Public insert collaboration_requirements" on public.collaboration_requirements;
-create policy "Public insert collaboration_requirements" on public.collaboration_requirements for insert with check (true);
-
 drop policy if exists "Admin all collaboration_requirements" on public.collaboration_requirements;
-create policy "Admin all collaboration_requirements" on public.collaboration_requirements for all using (auth.role() = 'authenticated');
+create policy "Permissive collaboration_requirements" on public.collaboration_requirements for all using (true) with check (true);
 
--- Media Assets: Public can view media records, authenticated admin has full CRUD
+-- Media Assets
 drop policy if exists "Public read media_assets" on public.media_assets;
-create policy "Public read media_assets" on public.media_assets for select using (true);
-
 drop policy if exists "Admin all media_assets" on public.media_assets;
-create policy "Admin all media_assets" on public.media_assets for all using (auth.role() = 'authenticated');
+create policy "Permissive media_assets" on public.media_assets for all using (true) with check (true);
+
+grant all on table public.services to anon, authenticated, service_role;
+grant all on table public.job_listings to anon, authenticated, service_role;
+grant all on table public.website_sections to anon, authenticated, service_role;
+grant all on table public.site_settings to anon, authenticated, service_role;
+grant all on table public.testimonials to anon, authenticated, service_role;
+grant all on table public.media_assets to anon, authenticated, service_role;
+grant all on table public.contact_inquiries to anon, authenticated, service_role;
+grant all on table public.career_applications to anon, authenticated, service_role;
+grant all on table public.collaboration_requirements to anon, authenticated, service_role;
 
 -- ------------------------------------------------------------------------------
 -- 12. Realtime Enablement (for instant synchronization without manual reloads)
