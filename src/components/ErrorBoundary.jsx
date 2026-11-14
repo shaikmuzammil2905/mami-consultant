@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom';
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('ErrorBoundary caught:', error, errorInfo);
   }
 
   render() {
@@ -28,7 +32,7 @@ export default class ErrorBoundary extends Component {
               </button>
               <Link
                 to="/"
-                onClick={() => this.setState({ hasError: false })}
+                onClick={() => this.setState({ hasError: false, error: null })}
                 className="px-5 py-2.5 rounded-full bg-mami-gradient text-white font-semibold text-sm"
               >
                 Go Back Home

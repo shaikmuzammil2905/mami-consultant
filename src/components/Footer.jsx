@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, MessageCircle, MapPin, Facebook, Linkedin, Youtube, ChevronDown, ChevronRight } from 'lucide-react';
-import { siteConfig, getWhatsAppUrl } from '../data/siteConfig';
+import { siteConfig, getWhatsAppUrl, getWhatsAppIndiaUrl, getWhatsAppUAEUrl } from '../data/siteConfig';
 import { useSiteContent } from '../context/ContentContext';
 
 export default function Footer() {
@@ -133,7 +133,7 @@ export default function Footer() {
                     <span>{siteConfig.phoneIndia}</span>
                   </a>
                   <a
-                    href={siteConfig.getWhatsAppIndiaUrl()}
+                    href={getWhatsAppIndiaUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#25D366] hover:text-white transition-colors"
@@ -151,7 +151,7 @@ export default function Footer() {
                     <span>{siteConfig.phoneUAE}</span>
                   </a>
                   <a
-                    href={siteConfig.getWhatsAppUAEUrl()}
+                    href={getWhatsAppUAEUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#25D366] hover:text-white transition-colors"

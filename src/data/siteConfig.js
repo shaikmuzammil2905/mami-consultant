@@ -138,3 +138,9 @@ export function getWhatsAppUAEUrl(customMessage) {
   return getWhatsAppUrl(customMessage, 'uae');
 }
 
+// Attach helpers to siteConfig object for maximum safety
+siteConfig.getWhatsAppUrl = getWhatsAppUrl;
+siteConfig.getWhatsAppIndiaUrl = getWhatsAppIndiaUrl;
+siteConfig.getWhatsAppUAEUrl = getWhatsAppUAEUrl;
+
+
