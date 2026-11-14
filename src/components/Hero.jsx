@@ -82,7 +82,7 @@ export default function Hero() {
           }}
         >
           <img
-            src={siteConfig.heroImages.desktopPrimary}
+            src={heroDb?.image_url || siteConfig.heroImages.desktopPrimary}
             alt="MAMI Career Consultant international healthcare team"
             className="w-full h-full object-cover object-right-bottom"
           />
@@ -295,7 +295,7 @@ export default function Hero() {
           }}
         >
           <img
-            src={siteConfig.heroImages.mobilePrimary}
+            src={heroDb?.extra_data?.mobile_image_url || heroDb?.background_url || siteConfig.heroImages.mobilePrimary}
             alt="MAMI international healthcare professionals"
             className="w-full h-auto block object-cover"
           />

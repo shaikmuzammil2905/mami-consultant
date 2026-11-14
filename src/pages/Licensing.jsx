@@ -5,14 +5,19 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import CTASection from '../components/CTASection';
 import ServiceVisualShowcase from '../components/ServiceVisualShowcase';
-import { licensingAuthorities, services } from '../data/services';
+import { licensingAuthorities, services as defaultServices } from '../data/services';
 import { getWhatsAppUrl } from '../data/siteConfig';
 import { useModal } from '../context/ModalContext';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function Licensing() {
+  const { services = defaultServices } = useSiteContent();
   const [selectedId, setSelectedId] = useState(licensingAuthorities[0].id);
   const { openModal } = useModal();
-  const service = services.find((s) => s.id === 'healthcare-licensing');
+  const service =
+    services.find((s) => s.id === 'healthcare-licensing') ||
+    defaultServices.find((s) => s.id === 'healthcare-licensing');
+  const serviceImg = service?.image_url || service?.image;
   const selectedAuth = licensingAuthorities.find((a) => a.id === selectedId) || licensingAuthorities[0];
 
   return (
@@ -60,7 +65,7 @@ export default function Licensing() {
       <section className="py-12 sm:py-16 bg-white">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 space-y-10">
           <ServiceVisualShowcase
-            image={service.image}
+            image={serviceImg}
             alt="Healthcare Licensing Services — DHA, DOH, MOH, SCFHS & more"
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">

@@ -4,9 +4,10 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
 import CTASection from '../components/CTASection';
-import { services } from '../data/services';
+import { services as defaultServices } from '../data/services';
 import { getWhatsAppUrl } from '../data/siteConfig';
 import { useModal } from '../context/ModalContext';
+import { useSiteContent } from '../context/ContentContext';
 
 const timelineSteps = [
   { step: '01', title: 'Submit Details', desc: 'Share your qualifications, experience letters, and target country goals.' },
@@ -27,8 +28,12 @@ const docCategories = [
 ];
 
 export default function Documentation() {
+  const { services = defaultServices } = useSiteContent();
   const { openModal } = useModal();
-  const service = services.find((s) => s.id === 'documentation');
+  const service =
+    services.find((s) => s.id === 'documentation') ||
+    defaultServices.find((s) => s.id === 'documentation');
+  const serviceImg = service?.image_url || service?.image;
 
   return (
     <>
@@ -97,7 +102,7 @@ export default function Documentation() {
           <div className="lg:col-span-6">
             <div className="rounded-3xl overflow-hidden bg-gradient-to-b from-[#EAFBFD] to-white shadow-xl border-2 border-[#CFEFF3] p-2.5 sm:p-3">
               <img
-                src={service.image}
+                src={serviceImg}
                 alt="Documentation & Verification Support — Complete Assistance"
                 className="w-full h-auto object-contain rounded-2xl"
               />

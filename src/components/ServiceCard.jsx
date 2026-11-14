@@ -11,6 +11,7 @@ export default function ServiceCard({
   className = '',
 }) {
   const Icon = service.icon;
+  const serviceImg = service.image_url || service.image;
 
   return (
     <motion.div
@@ -38,7 +39,7 @@ export default function ServiceCard({
         {compact ? (
           <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden bg-gradient-to-b from-[#EAFBFD] to-white border border-[#D4F2F6] mb-3 shrink-0 shadow-xs">
             <img
-              src={service.image}
+              src={serviceImg}
               alt={service.title}
               className="w-full h-full object-contain p-0.5 group-hover:scale-105 transition-transform duration-500"
             />
@@ -52,7 +53,7 @@ export default function ServiceCard({
         ) : (
           <div className="relative w-full bg-gradient-to-b from-[#EAFBFD] to-white border-b border-[#E2F6F9] p-2.5">
             <img
-              src={service.image}
+              src={serviceImg}
               alt={service.title}
               className="w-full aspect-[16/9] object-contain rounded-xl group-hover:scale-[1.02] transition-transform duration-500"
             />

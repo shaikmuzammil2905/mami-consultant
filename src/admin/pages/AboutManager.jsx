@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Info, Save, Upload, Eye } from 'lucide-react';
+import { Info, Save, Upload, Eye, CheckCircle, RotateCcw } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { uploadToCloudinary } from '../../lib/cloudinary';
 import { useSiteContent } from '../../context/ContentContext';
+import defaultAboutImg from '../../assets/about-doctor-skyline.jpg';
 
 export default function AboutManager() {
   const { refreshContent } = useSiteContent();
@@ -58,7 +59,7 @@ export default function AboutManager() {
     try {
       const res = await uploadToCloudinary(file, 'mami_about');
       setAboutData((prev) => ({ ...prev, image_url: res.url }));
-      setSaveStatus('About image uploaded successfully!');
+      setSaveStatus('About picture updated! Click "Save & Publish Changes" to apply.');
     } catch (err) {
       setSaveStatus('Notice: ' + err.message);
     } finally {
@@ -92,7 +93,7 @@ export default function AboutManager() {
       if (error) throw error;
 
       await refreshContent();
-      setSaveStatus('About section updated and published to live website!');
+      setSaveStatus('About section picture and text published live to website successfully!');
     } catch (err) {
       alert('Failed to save About section: ' + err.message);
     } finally {
@@ -106,7 +107,7 @@ export default function AboutManager() {
         <div>
           <h2 className="text-xl font-black text-[#0B3566]">About Section Manager</h2>
           <p className="text-xs text-gray-500">
-            Control the About section copy, mission statement, and imagery on the homepage
+            Preview and edit the About section picture, mission statement, and headline
           </p>
         </div>
 
@@ -117,17 +118,69 @@ export default function AboutManager() {
           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-xs font-bold text-[#0799A8] hover:bg-gray-50 transition-colors shadow-xs"
         >
           <Eye className="w-3.5 h-3.5" />
-          <span>Preview About Section</span>
+          <span>View Live Section</span>
         </a>
       </div>
 
       {saveStatus && (
-        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-semibold">
-          {saveStatus}
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-semibold flex items-center gap-2">
+          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{saveStatus}</span>
         </div>
       )}
 
+      {/* About Picture Preview Card */}
+      <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-xs space-y-4">
+        <h3 className="text-sm font-extrabold text-[#0B3566]">About Section Picture</h3>
+        <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-gray-200 flex flex-col sm:flex-row items-center gap-5">
+          <div className="relative w-48 aspect-[4/3] rounded-xl overflow-hidden border border-gray-200 bg-white shadow-xs shrink-0">
+            <img
+              src={aboutData.image_url || defaultAboutImg}
+              alt="About Section Visual"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="flex-1 space-y-2 text-center sm:text-left">
+            <h4 className="text-xs font-bold text-[#0B3566]">Active About Photo</h4>
+            <p className="text-xs text-gray-500">
+              This picture is displayed beside the "About MAMI" story and founder mission on the homepage.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-2">
+              <label className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-gray-300 hover:border-[#0799A8] text-[#0799A8] font-bold text-xs cursor-pointer shadow-xs transition-all">
+                <Upload className="w-3.5 h-3.5" />
+                <span>{uploadingImage ? 'Uploading...' : 'Change Picture'}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={uploadingImage}
+                  className="hidden"
+                />
+              </label>
+
+              {aboutData.image_url && (
+                <button
+                  type="button"
+                  onClick={() => setAboutData({ ...aboutData, image_url: '' })}
+                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1 px-2 py-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset Default</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Form */}
       <form onSubmit={handleSave} className="bg-white rounded-3xl border border-gray-200 p-6 shadow-xs space-y-5">
+        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+          About Copy & Text
+        </h3>
+
         <div>
           <label className="block text-xs font-bold text-[#0B3566] mb-1.5 uppercase tracking-wider">
             Badge Title
@@ -176,34 +229,6 @@ export default function AboutManager() {
           />
         </div>
 
-        <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="text-xs font-bold text-[#0B3566]">About Doctor / Clinic Image</h4>
-              <p className="text-[11px] text-gray-500">Cloudinary image or public URL</p>
-            </div>
-            <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-gray-300 hover:border-[#0799A8] text-[#0799A8] font-bold text-xs cursor-pointer shadow-xs">
-              <Upload className="w-3.5 h-3.5" />
-              <span>{uploadingImage ? 'Uploading...' : 'Upload Cloudinary'}</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                disabled={uploadingImage}
-                className="hidden"
-              />
-            </label>
-          </div>
-
-          <input
-            type="text"
-            value={aboutData.image_url}
-            onChange={(e) => setAboutData({ ...aboutData, image_url: e.target.value })}
-            placeholder="https://res.cloudinary.com/... or asset URL"
-            className="w-full text-xs p-2.5 bg-white border border-gray-200 rounded-xl outline-none"
-          />
-        </div>
-
         <div className="flex items-center justify-end pt-3 border-t">
           <button
             type="submit"
@@ -211,11 +236,10 @@ export default function AboutManager() {
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0799A8] to-[#007C91] text-white text-xs font-bold shadow-md hover:opacity-95 disabled:opacity-50 cursor-pointer"
           >
             <Save className="w-4 h-4" />
-            <span>{loading ? 'Publishing Updates...' : 'Save & Publish About'}</span>
+            <span>{loading ? 'Publishing Updates...' : 'Save & Publish Changes'}</span>
           </button>
         </div>
       </form>
     </div>
   );
 }
-

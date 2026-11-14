@@ -4,22 +4,21 @@ import {
   PlusCircle,
   Edit,
   Trash2,
-  Eye,
   EyeOff,
   Upload,
   CheckCircle,
-  ArrowUpDown,
   RefreshCw,
-  ExternalLink,
   X,
+  Image as ImageIcon,
+  RotateCcw,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { services as defaultServices } from '../../data/services';
-import { uploadToCloudinary, getCloudinaryConfig } from '../../lib/cloudinary';
+import { uploadToCloudinary } from '../../lib/cloudinary';
 import { useSiteContent } from '../../context/ContentContext';
 
 export default function ServicesManager() {
-  const { services, refreshContent } = useSiteContent();
+  const { services: liveServices, refreshContent } = useSiteContent();
   const [dbServices, setDbServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingService, setEditingService] = useState(null);
@@ -27,6 +26,11 @@ export default function ServicesManager() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [formMsg, setFormMsg] = useState('');
+
+  const getDefaultImageForId = (id) => {
+    const found = defaultServices.find((s) => s.id === id);
+    return found?.image || '';
+  };
 
   const fetchDbServices = async () => {
     setLoading(true);
@@ -51,6 +55,7 @@ export default function ServicesManager() {
             display_order: idx + 1,
             is_published: true,
             authorities: s.authorities || [],
+            image_url: '',
           }))
         );
       }
@@ -110,13 +115,17 @@ export default function ServicesManager() {
     try {
       const res = await uploadToCloudinary(file, 'mami_services');
       setEditingService((prev) => ({ ...prev, image_url: res.url }));
-      setFormMsg('Image uploaded to Cloudinary successfully!');
+      setFormMsg('Service picture updated! Remember to click "Save & Publish" to update the website.');
     } catch (err) {
-      // Fallback: convert to base64 or prompt cloud config
-      setFormMsg('Cloudinary upload notice: ' + err.message);
+      setFormMsg('Upload notice: ' + err.message);
     } finally {
       setUploadingImage(false);
     }
+  };
+
+  const handleResetImage = () => {
+    setEditingService((prev) => ({ ...prev, image_url: '' }));
+    setFormMsg('Reset to default service artwork.');
   };
 
   const handleSave = async (e) => {
@@ -148,7 +157,7 @@ export default function ServicesManager() {
 
       await fetchDbServices();
       await refreshContent();
-      setFormMsg('Service saved and published to live website!');
+      setFormMsg('Service saved! Live website updated instantly.');
       setTimeout(() => setEditingService(null), 1200);
     } catch (err) {
       alert('Failed to save service: ' + err.message);
@@ -196,7 +205,7 @@ export default function ServicesManager() {
         <div>
           <h2 className="text-xl font-black text-[#0B3566]">Services Management</h2>
           <p className="text-xs text-gray-500">
-            Control the 7 core healthcare licensing services, headings, descriptions, and banners
+            Preview pictures and control titles, subtitles, descriptions, and banners for all healthcare services
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -204,6 +213,7 @@ export default function ServicesManager() {
             type="button"
             onClick={fetchDbServices}
             className="p-2 rounded-xl bg-white border border-gray-200 text-gray-600 hover:text-[#0799A8]"
+            title="Refresh services list"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -218,13 +228,14 @@ export default function ServicesManager() {
         </div>
       </div>
 
-      {/* Services Grid / List */}
+      {/* Services Grid / List with Visible Picture Previews */}
       <div className="bg-white rounded-3xl border border-gray-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                 <th className="py-3 px-4">Order</th>
+                <th className="py-3 px-4">Service Picture</th>
                 <th className="py-3 px-4">Service Title & Subtitle</th>
                 <th className="py-3 px-4">Route</th>
                 <th className="py-3 px-4">Status</th>
@@ -232,67 +243,85 @@ export default function ServicesManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-xs text-gray-700">
-              {dbServices.map((svc) => (
-                <tr key={svc.id} className="hover:bg-gray-50/60 transition-colors">
-                  <td className="py-3 px-4 font-bold text-gray-400">#{svc.display_order}</td>
+              {dbServices.map((svc) => {
+                const activeImg = svc.image_url || getDefaultImageForId(svc.id);
+                return (
+                  <tr key={svc.id} className="hover:bg-gray-50/60 transition-colors">
+                    <td className="py-3 px-4 font-bold text-gray-400">#{svc.display_order}</td>
 
-                  <td className="py-3 px-4">
-                    <p className="font-bold text-[#0B3566] text-sm">{svc.title}</p>
-                    <p className="text-[11px] text-gray-500 mt-0.5">
-                      {svc.short_subtitle || svc.shortSubtitle}
-                    </p>
-                  </td>
+                    {/* Visible Service Picture Thumbnail */}
+                    <td className="py-3 px-4">
+                      <div className="w-16 h-11 rounded-xl bg-gradient-to-b from-[#EAFBFD] to-white border border-[#CFEFF3] p-1 flex items-center justify-center overflow-hidden shadow-xs">
+                        {activeImg ? (
+                          <img
+                            src={activeImg}
+                            alt={svc.title}
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <ImageIcon className="w-5 h-5 text-gray-400" />
+                        )}
+                      </div>
+                    </td>
 
-                  <td className="py-3 px-4 font-mono text-[11px] text-[#0799A8]">
-                    {svc.route}
-                  </td>
+                    <td className="py-3 px-4">
+                      <p className="font-bold text-[#0B3566] text-sm">{svc.title}</p>
+                      <p className="text-[11px] text-gray-500 mt-0.5">
+                        {svc.short_subtitle || svc.shortSubtitle}
+                      </p>
+                    </td>
 
-                  <td className="py-3 px-4">
-                    <button
-                      type="button"
-                      onClick={() => togglePublish(svc)}
-                      className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full border cursor-pointer transition-colors ${
-                        svc.is_published
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-gray-100 text-gray-500 border-gray-200'
-                      }`}
-                    >
-                      {svc.is_published ? (
-                        <>
-                          <CheckCircle className="w-3 h-3 text-emerald-600" />
-                          <span>Published</span>
-                        </>
-                      ) : (
-                        <>
-                          <EyeOff className="w-3 h-3" />
-                          <span>Draft</span>
-                        </>
-                      )}
-                    </button>
-                  </td>
+                    <td className="py-3 px-4 font-mono text-[11px] text-[#0799A8]">
+                      {svc.route}
+                    </td>
 
-                  <td className="py-3 px-4 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
+                    <td className="py-3 px-4">
                       <button
                         type="button"
-                        onClick={() => handleEdit(svc)}
-                        className="p-1.5 rounded-lg text-[#0799A8] hover:bg-[#EAFBFD] transition-colors"
-                        title="Edit Service"
+                        onClick={() => togglePublish(svc)}
+                        className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full border cursor-pointer transition-colors ${
+                          svc.is_published
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : 'bg-gray-100 text-gray-500 border-gray-200'
+                        }`}
                       >
-                        <Edit className="w-4 h-4" />
+                        {svc.is_published ? (
+                          <>
+                            <CheckCircle className="w-3 h-3 text-emerald-600" />
+                            <span>Published</span>
+                          </>
+                        ) : (
+                          <>
+                            <EyeOff className="w-3 h-3" />
+                            <span>Draft</span>
+                          </>
+                        )}
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(svc.id)}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(svc)}
+                          className="p-1.5 rounded-lg text-[#0799A8] hover:bg-[#EAFBFD] transition-colors"
+                          title="Edit Service"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(svc.id)}
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -305,10 +334,10 @@ export default function ServicesManager() {
             <div className="flex items-center justify-between border-b pb-3">
               <div>
                 <h3 className="font-extrabold text-base text-[#0B3566]">
-                  {isNew ? 'Create New Service' : `Edit: ${editingService.title}`}
+                  {isNew ? 'Create New Service' : `Edit Service: ${editingService.title}`}
                 </h3>
                 <p className="text-xs text-gray-500">
-                  Updates reflect instantly on homepage and service detail pages
+                  Changes to picture and text reflect instantly across the main website
                 </p>
               </div>
               <button
@@ -327,6 +356,80 @@ export default function ServicesManager() {
             )}
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
+              {/* Service Picture Visual Section */}
+              <div className="p-4 bg-gradient-to-br from-[#EAFBFD]/60 via-white to-[#F2FCFD] rounded-2xl border-2 border-[#CFEFF3] space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h4 className="font-extrabold text-sm text-[#0B3566]">
+                      Service Visual Picture
+                    </h4>
+                    <p className="text-[11px] text-gray-500">
+                      Displayed on homepage service cards and dedicated service pages
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#0799A8] to-[#007C91] text-white font-bold text-[11px] cursor-pointer shadow-xs hover:opacity-95">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{uploadingImage ? 'Uploading Picture...' : 'Change Picture'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={uploadingImage}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {editingService.image_url && (
+                      <button
+                        type="button"
+                        onClick={handleResetImage}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white border border-gray-200 text-gray-600 text-[11px] font-bold hover:text-red-600"
+                        title="Reset to default artwork"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        <span>Reset</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Live Preview Display */}
+                <div className="rounded-2xl border border-[#CFEFF3] bg-white p-3 flex flex-col sm:flex-row items-center gap-4">
+                  <div className="w-full sm:w-48 h-32 rounded-xl bg-gradient-to-b from-[#EAFBFD] to-white border border-[#D7F3F7] p-2 flex items-center justify-center shrink-0 overflow-hidden">
+                    {editingService.image_url || getDefaultImageForId(editingService.id) ? (
+                      <img
+                        src={editingService.image_url || getDefaultImageForId(editingService.id)}
+                        alt={editingService.title || 'Service preview'}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <ImageIcon className="w-8 h-8 text-gray-300" />
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#0799A8] block">
+                      {editingService.image_url ? 'Custom Uploaded Picture' : 'Default Service Artwork'}
+                    </span>
+                    <input
+                      type="text"
+                      value={editingService.image_url}
+                      onChange={(e) =>
+                        setEditingService((prev) => ({ ...prev, image_url: e.target.value }))
+                      }
+                      placeholder="Paste picture URL or click 'Change Picture' above"
+                      className="w-full text-xs p-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none"
+                    />
+                    <p className="text-[11px] text-gray-400">
+                      Supports direct image uploads (PNG, JPG, WebP) or any web image link.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Title & Subtitle */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-[#0B3566] mb-1">Service Title</label>
@@ -387,43 +490,6 @@ export default function ServicesManager() {
                 />
               </div>
 
-              {/* Service Banner Image / Cloudinary Upload */}
-              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-[#0B3566]">Service Visual Image</span>
-                  <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-gray-300 hover:border-[#0799A8] text-[#0799A8] font-bold text-[11px] cursor-pointer shadow-xs">
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>{uploadingImage ? 'Uploading...' : 'Upload to Cloudinary'}</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={uploadingImage}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <input
-                    type="text"
-                    value={editingService.image_url}
-                    onChange={(e) =>
-                      setEditingService((prev) => ({ ...prev, image_url: e.target.value }))
-                    }
-                    placeholder="https://res.cloudinary.com/... or asset URL"
-                    className="flex-1 p-2 bg-white border border-gray-200 rounded-xl outline-none"
-                  />
-                  {editingService.image_url && (
-                    <img
-                      src={editingService.image_url}
-                      alt="Preview"
-                      className="w-10 h-10 object-contain rounded-lg border bg-white"
-                    />
-                  )}
-                </div>
-              </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block font-bold text-[#0B3566] mb-1">Route</label>
@@ -480,9 +546,9 @@ export default function ServicesManager() {
                 <button
                   type="submit"
                   disabled={saveLoading}
-                  className="px-5 py-2 font-bold text-white bg-gradient-to-r from-[#0799A8] to-[#007C91] rounded-xl shadow-xs disabled:opacity-50"
+                  className="px-5 py-2 font-bold text-white bg-gradient-to-r from-[#0799A8] to-[#007C91] rounded-xl shadow-xs disabled:opacity-50 cursor-pointer"
                 >
-                  {saveLoading ? 'Saving to Database...' : 'Save & Publish'}
+                  {saveLoading ? 'Saving to Database...' : 'Save & Publish Service'}
                 </button>
               </div>
             </form>
@@ -492,4 +558,3 @@ export default function ServicesManager() {
     </div>
   );
 }
-

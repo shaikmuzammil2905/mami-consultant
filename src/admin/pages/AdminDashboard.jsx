@@ -20,7 +20,6 @@ import {
   Cloud,
 } from 'lucide-react';
 import { supabase, checkSupabaseConnection } from '../../lib/supabase';
-import { getCloudinaryConfig } from '../../lib/cloudinary';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -38,7 +37,6 @@ export default function AdminDashboard() {
   const [recentInquiries, setRecentInquiries] = useState([]);
   const [recentApplications, setRecentApplications] = useState([]);
   const [dbStatus, setDbStatus] = useState({ ok: true, checking: true });
-  const [cloudinaryConfig, setCloudinaryConfig] = useState(getCloudinaryConfig());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -211,7 +209,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Backend & Cloudinary Status Cards */}
+      {/* Backend & Media Storage Status Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Supabase Status */}
         <div className="p-4 rounded-2xl bg-white border border-gray-200 shadow-xs flex items-center justify-between">
@@ -232,25 +230,23 @@ export default function AdminDashboard() {
           </span>
         </div>
 
-        {/* Cloudinary Status */}
+        {/* Media Storage Engine Status */}
         <div className="p-4 rounded-2xl bg-white border border-gray-200 shadow-xs flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#EAFBFD] text-[#0799A8] flex items-center justify-center">
               <Cloud className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-gray-500 font-semibold">Cloudinary Media</p>
+              <p className="text-xs text-gray-500 font-semibold">Media Storage Engine</p>
               <p className="text-sm font-bold text-[#0B3566]">
-                Preset: {cloudinaryConfig.uploadPreset}
+                Instant Sync & Upload
               </p>
             </div>
           </div>
-          <Link
-            to="/admin/settings"
-            className="text-[11px] font-bold text-[#0799A8] hover:underline"
-          >
-            {cloudinaryConfig.isConfigured ? 'Configured' : 'Set Cloud Name'}
-          </Link>
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Operational</span>
+          </span>
         </div>
 
         {/* Public Website Status */}

@@ -20,6 +20,7 @@ import CTASection from '../components/CTASection';
 import aboutImg from '../assets/about-doctor-skyline.jpg';
 import { siteConfig } from '../data/siteConfig';
 import { useModal } from '../context/ModalContext';
+import { useSiteContent } from '../context/ContentContext';
 
 const values = [
   { title: 'Trust', desc: 'Ethical, reliable guidance you can depend on at every milestone.', icon: ShieldCheck },
@@ -34,6 +35,8 @@ const values = [
 
 export default function About() {
   const { openModal } = useModal();
+  const { sections } = useSiteContent();
+  const activeAboutImg = sections?.about?.image_url || aboutImg;
 
   return (
     <>
@@ -60,7 +63,7 @@ export default function About() {
           >
             <div className="rounded-3xl overflow-hidden shadow-xl border border-[#CFEFF3]">
               <img
-                src={aboutImg}
+                src={activeAboutImg}
                 alt="Healthcare professional overlooking international city skyline"
                 className="w-full aspect-[4/3] object-cover"
               />

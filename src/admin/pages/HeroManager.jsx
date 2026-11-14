@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Sparkles, Save, Upload, ExternalLink, Image as ImageIcon, Eye } from 'lucide-react';
+import { Sparkles, Save, Upload, Eye, Image as ImageIcon, CheckCircle, RotateCcw } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { uploadToCloudinary } from '../../lib/cloudinary';
 import { useSiteContent } from '../../context/ContentContext';
+import defaultDesktopHero from '../../assets/hero-desktop.png';
+import defaultMobileHero from '../../assets/hero-mobile.png';
 
 export default function HeroManager() {
-  const { sections, refreshContent } = useSiteContent();
+  const { refreshContent } = useSiteContent();
   const [heroData, setHeroData] = useState({
     badge: 'Premier Healthcare Career Consultancy',
     title: 'Navigate Your Global Healthcare Career with Absolute Confidence',
@@ -17,16 +19,11 @@ export default function HeroManager() {
     cta_secondary_text: 'Speak with Our Founder',
     cta_secondary_link: '/why-choose-us',
     image_url: '',
-    background_url: '',
-    stats: [
-      { value: '12+', label: 'Years Experience' },
-      { value: '100%', label: 'Dedicated Guidance' },
-      { value: '7+', label: 'Global Destinations' },
-    ],
+    mobile_image_url: '',
   });
 
   const [loading, setLoading] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingField, setUploadingField] = useState(null);
   const [saveStatus, setSaveStatus] = useState('');
 
   useEffect(() => {
@@ -50,8 +47,7 @@ export default function HeroManager() {
             cta_secondary_text: data.cta_secondary_text || prev.cta_secondary_text,
             cta_secondary_link: data.cta_secondary_link || prev.cta_secondary_link,
             image_url: data.image_url || '',
-            background_url: data.background_url || '',
-            stats: data.extra_data?.stats || prev.stats,
+            mobile_image_url: data.extra_data?.mobile_image_url || data.background_url || '',
           }));
         }
       } catch (err) {
@@ -65,16 +61,16 @@ export default function HeroManager() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploadingImage(true);
+    setUploadingField(field);
     setSaveStatus('');
     try {
       const res = await uploadToCloudinary(file, 'mami_hero');
       setHeroData((prev) => ({ ...prev, [field]: res.url }));
-      setSaveStatus('Hero image uploaded to Cloudinary successfully!');
+      setSaveStatus('Picture updated successfully! Click "Save & Publish Changes" to apply to live website.');
     } catch (err) {
-      setSaveStatus('Cloudinary notice: ' + err.message);
+      setSaveStatus('Upload notice: ' + err.message);
     } finally {
-      setUploadingImage(false);
+      setUploadingField(null);
     }
   };
 
@@ -95,8 +91,8 @@ export default function HeroManager() {
         cta_secondary_text: heroData.cta_secondary_text,
         cta_secondary_link: heroData.cta_secondary_link,
         image_url: heroData.image_url,
-        background_url: heroData.background_url,
-        extra_data: { stats: heroData.stats },
+        background_url: heroData.mobile_image_url,
+        extra_data: { mobile_image_url: heroData.mobile_image_url },
         is_visible: true,
         updated_at: new Date().toISOString(),
       };
@@ -108,7 +104,7 @@ export default function HeroManager() {
       if (error) throw error;
 
       await refreshContent();
-      setSaveStatus('Hero section updated and published to live website!');
+      setSaveStatus('Hero pictures and text published live to website successfully!');
     } catch (err) {
       alert('Failed to save Hero section: ' + err.message);
     } finally {
@@ -123,7 +119,7 @@ export default function HeroManager() {
         <div>
           <h2 className="text-xl font-black text-[#0B3566]">Hero Section Manager</h2>
           <p className="text-xs text-gray-500">
-            Control the main homepage banner, headline, tagline, CTA buttons, and images
+            Preview and change the Desktop and Mobile hero pictures, headline, and buttons
           </p>
         </div>
 
@@ -134,18 +130,125 @@ export default function HeroManager() {
           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-xs font-bold text-[#0799A8] hover:bg-gray-50 transition-colors shadow-xs"
         >
           <Eye className="w-3.5 h-3.5" />
-          <span>Preview Live Hero</span>
+          <span>View Live Website</span>
         </a>
       </div>
 
       {saveStatus && (
-        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-semibold">
-          {saveStatus}
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-semibold flex items-center gap-2">
+          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{saveStatus}</span>
         </div>
       )}
 
-      {/* Hero Form */}
+      {/* Hero Visuals Preview Card (Both Desktop & Mobile Pics Visible) */}
+      <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b pb-3">
+          <div>
+            <h3 className="text-sm font-extrabold text-[#0B3566]">Hero Section Pictures</h3>
+            <p className="text-xs text-gray-500">
+              Both active pictures are shown below. Change either picture anytime with instant preview.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* 1. Desktop Hero Picture */}
+          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-gray-200 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-[#0B3566]">Desktop Hero Visual</span>
+                <span className="text-[10px] font-bold text-[#0799A8] bg-[#EAFBFD] px-2 py-0.5 rounded-full border border-[#CFEFF3]">
+                  Desktop View
+                </span>
+              </div>
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-gray-200 bg-white flex items-center justify-center">
+                <img
+                  src={heroData.image_url || defaultDesktopHero}
+                  alt="Desktop Hero"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-1">
+              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-gray-300 hover:border-[#0799A8] text-[#0799A8] font-bold text-xs cursor-pointer shadow-xs transition-all">
+                <Upload className="w-3.5 h-3.5" />
+                <span>{uploadingField === 'image_url' ? 'Uploading...' : 'Change Desktop Picture'}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'image_url')}
+                  disabled={uploadingField !== null}
+                  className="hidden"
+                />
+              </label>
+
+              {heroData.image_url && (
+                <button
+                  type="button"
+                  onClick={() => setHeroData({ ...heroData, image_url: '' })}
+                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset Default</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* 2. Mobile Hero Picture */}
+          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-gray-200 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-[#0B3566]">Mobile Hero Visual</span>
+                <span className="text-[10px] font-bold text-[#007C91] bg-cyan-50 px-2 py-0.5 rounded-full border border-cyan-200">
+                  Mobile View
+                </span>
+              </div>
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-gray-200 bg-white flex items-center justify-center">
+                <img
+                  src={heroData.mobile_image_url || defaultMobileHero}
+                  alt="Mobile Hero"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-1">
+              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-gray-300 hover:border-[#0799A8] text-[#0799A8] font-bold text-xs cursor-pointer shadow-xs transition-all">
+                <Upload className="w-3.5 h-3.5" />
+                <span>{uploadingField === 'mobile_image_url' ? 'Uploading...' : 'Change Mobile Picture'}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'mobile_image_url')}
+                  disabled={uploadingField !== null}
+                  className="hidden"
+                />
+              </label>
+
+              {heroData.mobile_image_url && (
+                <button
+                  type="button"
+                  onClick={() => setHeroData({ ...heroData, mobile_image_url: '' })}
+                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset Default</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Content Form */}
       <form onSubmit={handleSave} className="bg-white rounded-3xl border border-gray-200 p-6 shadow-xs space-y-5">
+        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+          Hero Copy & Headline Content
+        </h3>
+
         <div>
           <label className="block text-xs font-bold text-[#0B3566] mb-1.5 uppercase tracking-wider">
             Hero Top Pill / Badge
@@ -194,10 +297,10 @@ export default function HeroManager() {
           />
         </div>
 
-        {/* CTA Buttons Config */}
+        {/* CTA Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-3">
-            <h4 className="text-xs font-bold text-[#0B3566]">Primary CTA Button</h4>
+            <h4 className="text-xs font-bold text-[#0B3566]">Primary Action Button</h4>
             <div>
               <label className="block text-[11px] font-semibold text-gray-500 mb-1">Button Label</label>
               <input
@@ -219,7 +322,7 @@ export default function HeroManager() {
           </div>
 
           <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-3">
-            <h4 className="text-xs font-bold text-[#0B3566]">Secondary CTA Button</h4>
+            <h4 className="text-xs font-bold text-[#0B3566]">Secondary Action Button</h4>
             <div>
               <label className="block text-[11px] font-semibold text-gray-500 mb-1">Button Label</label>
               <input
@@ -241,37 +344,6 @@ export default function HeroManager() {
           </div>
         </div>
 
-        {/* Media / Image Upload */}
-        <div className="p-4 bg-[#EAFBFD] rounded-2xl border border-[#CFEFF3] space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="text-xs font-bold text-[#0B3566]">Custom Hero Artwork (Cloudinary)</h4>
-              <p className="text-[11px] text-gray-500">
-                Leave empty to use default animated healthcare hero artwork
-              </p>
-            </div>
-            <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#CFEFF3] hover:border-[#0799A8] text-[#0799A8] font-bold text-xs cursor-pointer shadow-xs">
-              <Upload className="w-3.5 h-3.5" />
-              <span>{uploadingImage ? 'Uploading...' : 'Upload Cloudinary'}</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleImageUpload(e, 'image_url')}
-                disabled={uploadingImage}
-                className="hidden"
-              />
-            </label>
-          </div>
-
-          <input
-            type="text"
-            value={heroData.image_url}
-            onChange={(e) => setHeroData({ ...heroData, image_url: e.target.value })}
-            placeholder="https://res.cloudinary.com/... or public image URL"
-            className="w-full text-xs p-2.5 bg-white border border-gray-200 rounded-xl outline-none"
-          />
-        </div>
-
         {/* Save Bar */}
         <div className="flex items-center justify-end pt-3 border-t">
           <button
@@ -280,11 +352,10 @@ export default function HeroManager() {
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0799A8] to-[#007C91] text-white text-xs font-bold shadow-md hover:opacity-95 disabled:opacity-50 cursor-pointer"
           >
             <Save className="w-4 h-4" />
-            <span>{loading ? 'Publishing Updates...' : 'Save & Publish Hero'}</span>
+            <span>{loading ? 'Publishing to Website...' : 'Save & Publish Changes'}</span>
           </button>
         </div>
       </form>
     </div>
   );
 }
-

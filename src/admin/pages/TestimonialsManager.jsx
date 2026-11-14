@@ -221,11 +221,24 @@ export default function TestimonialsManager() {
             </div>
 
             <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-[#0B3566]">{item.name}</p>
-                <p className="text-[11px] text-gray-500">
-                  {item.role || item.qualification} • {item.location}
-                </p>
+              <div className="flex items-center gap-2.5">
+                {item.avatar_url ? (
+                  <img
+                    src={item.avatar_url}
+                    alt={item.name}
+                    className="w-9 h-9 rounded-full object-cover border border-[#CFEFF3] shrink-0"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-[#EAFBFD] border border-[#CFEFF3] text-[#0799A8] font-bold text-xs flex items-center justify-center shrink-0">
+                    {item.name?.charAt(0) || 'C'}
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs font-bold text-[#0B3566]">{item.name}</p>
+                  <p className="text-[11px] text-gray-500">
+                    {item.role || item.qualification} • {item.location}
+                  </p>
+                </div>
               </div>
 
               <div className="flex items-center gap-1">
@@ -332,6 +345,47 @@ export default function TestimonialsManager() {
                     <option value={5}>5 Stars (★★★★★)</option>
                     <option value={4}>4 Stars (★★★★☆)</option>
                   </select>
+                </div>
+              </div>
+
+              {/* Client Avatar Visual */}
+              <div className="p-3.5 bg-gradient-to-br from-[#EAFBFD]/60 to-white rounded-2xl border border-[#CFEFF3] space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-[#0B3566]">Client Picture / Avatar</span>
+                  <label className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#0799A8] to-[#007C91] text-white text-[11px] font-bold cursor-pointer hover:opacity-95 shadow-xs">
+                    <Upload className="w-3 h-3" />
+                    <span>{uploadingImage ? 'Uploading...' : 'Change Picture'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploadingImage}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-white border-2 border-[#0799A8]/30 flex items-center justify-center shrink-0 shadow-xs">
+                    {editingItem.avatar_url ? (
+                      <img
+                        src={editingItem.avatar_url}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-xs font-bold text-[#0799A8]">
+                        {editingItem.name?.charAt(0) || 'P'}
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={editingItem.avatar_url}
+                    onChange={(e) => setEditingItem({ ...editingItem, avatar_url: e.target.value })}
+                    placeholder="Picture URL or upload above"
+                    className="flex-1 text-xs p-2 bg-white border border-gray-200 rounded-xl outline-none"
+                  />
                 </div>
               </div>
 

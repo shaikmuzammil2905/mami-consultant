@@ -114,7 +114,7 @@ export default function ServiceGrid({ compact = true }) {
               <AnimatePresence mode="wait">
                 <motion.img
                   key={activeService.id}
-                  src={activeService.image}
+                  src={activeService.image_url || activeService.image}
                   alt={activeService.title}
                   initial={{ opacity: 0, scale: 0.99 }}
                   animate={{ opacity: 1, scale: 1 }}

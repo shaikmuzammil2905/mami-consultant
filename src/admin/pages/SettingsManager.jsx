@@ -100,7 +100,7 @@ export default function SettingsManager() {
         <div>
           <h2 className="text-xl font-black text-[#0B3566]">Site & Contact Settings</h2>
           <p className="text-xs text-gray-500">
-            Control contact telephone numbers, WhatsApp, clinic address, and Cloudinary settings
+            Control contact telephone numbers, WhatsApp, clinic address, and site settings
           </p>
         </div>
       </div>
@@ -178,31 +178,28 @@ export default function SettingsManager() {
           </div>
         </div>
 
-        {/* Cloudinary Integration Configuration */}
+        {/* Cloud Storage Configuration */}
         <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-xs space-y-4">
           <div className="flex items-center gap-2">
             <Cloud className="w-4 h-4 text-[#0799A8]" />
             <h3 className="text-xs font-bold text-[#0B3566] uppercase tracking-wider">
-              Cloudinary Media Integration
+              Cloud Media Storage (Optional)
             </h3>
           </div>
 
-          <div className="p-4 bg-[#EAFBFD] rounded-2xl border border-[#CFEFF3] text-xs text-[#0B3566] space-y-1">
-            <p className="font-bold">Active Upload Preset: ml-default</p>
-            <p className="text-[#60758A]">
-              Upload preset is hardcoded to <code>ml-default</code> as provided. Enter your Cloudinary Cloud Name below to enable direct client uploads.
-            </p>
-          </div>
+          <p className="text-xs text-[#60758A]">
+            Antigravity includes built-in optimized image uploads. If you wish to connect an external cloud bucket, you can configure your cloud identifier below.
+          </p>
 
           <div>
             <label className="block text-xs font-bold text-[#0B3566] mb-1">
-              Cloudinary Cloud Name
+              Cloud Storage Identifier
             </label>
             <input
               type="text"
               value={cloudinaryName}
               onChange={(e) => setCloudinaryName(e.target.value)}
-              placeholder="e.g. mami-consultant or dxyz123"
+              placeholder="Optional: enter cloud storage account identifier"
               className="w-full text-xs p-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none font-mono"
             />
           </div>

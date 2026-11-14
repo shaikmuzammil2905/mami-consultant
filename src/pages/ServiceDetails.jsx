@@ -4,14 +4,16 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import CTASection from '../components/CTASection';
 import ServiceCard from '../components/ServiceCard';
-import { services } from '../data/services';
+import { services as defaultServices } from '../data/services';
 import { getWhatsAppUrl } from '../data/siteConfig';
 import { useModal } from '../context/ModalContext';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function ServiceDetails({ serviceIdProp }) {
+  const { services = defaultServices } = useSiteContent();
   const { slug } = useParams();
   const targetId = serviceIdProp || slug;
-  const service = services.find((s) => s.id === targetId);
+  const service = services.find((s) => s.id === targetId) || defaultServices.find((s) => s.id === targetId);
   const { openModal } = useModal();
 
   if (!service) {
@@ -81,7 +83,7 @@ export default function ServiceDetails({ serviceIdProp }) {
             <div className="lg:col-span-6">
               <div className="rounded-3xl overflow-hidden bg-gradient-to-b from-[#EAFBFD] to-white shadow-xl border-2 border-[#CFEFF3] p-2.5 sm:p-3">
                 <img
-                  src={service.image}
+                  src={service.image_url || service.image}
                   alt={service.title}
                   className="w-full h-auto object-contain rounded-2xl"
                 />
