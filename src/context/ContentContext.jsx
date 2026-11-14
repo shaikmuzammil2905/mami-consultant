@@ -9,18 +9,24 @@ const ContentContext = createContext(null);
 
 export function ContentProvider({ children }) {
   const [siteSettings, setSiteSettings] = useState({
-    brand_name: siteConfig.name,
-    brand_short: siteConfig.brandName,
-    tagline: siteConfig.tagline,
-    phone: siteConfig.phone,
-    whatsapp: siteConfig.whatsapp,
-    email: siteConfig.email,
-    address: siteConfig.address,
-    owner_name: siteConfig.founder.name,
+    brand_name: siteConfig?.businessName || 'MAMI Career Consultant',
+    brand_short: siteConfig?.brandName || 'MAMI',
+    tagline: siteConfig?.tagline || 'Clear Guidance • Proper Documentation • Global Career Support.',
+    phone: siteConfig?.phone || '+91 9533079819',
+    whatsapp: siteConfig?.whatsappDisplay || siteConfig?.phone || '+91 9533079819',
+    email: siteConfig?.email || 'contact@mamiconsultant.com',
+    address: siteConfig?.address || 'Rajiv Swagruha Township, Bandlaguda, Nagole, Hyderabad, India',
+    owner_name: siteConfig?.owner || 'Dr. Ramyakrishna Mamidala',
     logo_url: null,
     announcement_text: 'DHA & UK HCPC Exam Batches Now Open — Enrol Today for Fast-Track Success',
     announcement_enabled: true,
-    social_links: siteConfig.social,
+    social_links: {
+      whatsapp: 'https://wa.me/919533079819',
+      instagram: 'https://instagram.com/mami_career_consultant',
+      facebook: 'https://facebook.com/mamiconsultant',
+      linkedin: 'https://linkedin.com/company/mami-career-consultant',
+      youtube: 'https://youtube.com/@mamiconsultant',
+    },
     footer_text:
       'MAMI Career Consultant empowers healthcare professionals across India with genuine, transparent international licensing, exam preparation, verification, and recruitment services.',
   });
@@ -256,3 +262,4 @@ export function useSiteContent() {
   }
   return context;
 }
+

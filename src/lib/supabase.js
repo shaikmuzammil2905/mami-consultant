@@ -28,3 +28,4 @@ export async function checkSupabaseConnection() {
     return { ok: false, error: err.message };
   }
 }
+

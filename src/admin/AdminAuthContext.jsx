@@ -10,11 +10,17 @@ export function AdminAuthProvider({ children }) {
 
   useEffect(() => {
     // 1. Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.warn('Supabase auth getSession note:', err);
+        setLoading(false);
+      });
 
     // 2. Listen for auth state changes
     const {
@@ -118,3 +124,4 @@ export function useAdminAuth() {
   }
   return context;
 }
+

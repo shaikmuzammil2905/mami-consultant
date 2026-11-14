@@ -539,3 +539,4 @@ alter publication supabase_realtime add table public.contact_inquiries;
 alter publication supabase_realtime add table public.career_applications;
 alter publication supabase_realtime add table public.collaboration_requirements;
 alter publication supabase_realtime add table public.media_assets;
+

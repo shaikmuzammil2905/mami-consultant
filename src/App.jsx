@@ -125,6 +125,7 @@ function AppShell() {
             <Route path="settings" element={<SettingsManager />} />
             <Route path="seo" element={<SeoManager />} />
           </Route>
+          <Route path="*" element={<AdminLogin />} />
         </Routes>
       </Suspense>
     );

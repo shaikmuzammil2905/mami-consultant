@@ -93,3 +93,4 @@ export async function uploadToCloudinary(file, folder = 'mami_consultant', onPro
     xhr.send(formData);
   });
 }
+
