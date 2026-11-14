@@ -14,6 +14,7 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
 import CertificationsSection from '../components/CertificationsSection';
+import FounderSection from '../components/FounderSection';
 import CTASection from '../components/CTASection';
 import { founderProfile } from '../data/founderAndCertifications';
 import { getWhatsAppUrl } from '../data/siteConfig';
@@ -57,69 +58,7 @@ export default function WhyChooseUs() {
       </PageHero>
 
       {/* ==================== MEET OUR FOUNDER ==================== */}
-      <section className="py-12 sm:py-16 bg-white">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
-          <div className="rounded-3xl bg-gradient-to-br from-[#EAFBFD] via-white to-[#DFF6FA] border-2 border-[#CFEFF3] shadow-xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.45 }}
-              className="lg:col-span-5"
-            >
-              <div className="rounded-3xl overflow-hidden bg-[#0B3566] border-2 border-white shadow-xl max-w-md mx-auto">
-                <img
-                  src={founderProfile.portrait}
-                  alt={founderProfile.name}
-                  className="w-full h-auto object-contain"
-                />
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.45 }}
-              className="lg:col-span-7 space-y-5"
-            >
-              <div>
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white border border-[#BFEBF0] text-[#007C91] text-xs font-extrabold uppercase tracking-wider mb-3">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Meet Our Founder</span>
-                </span>
-                <h2 className="text-2xl sm:text-4xl font-extrabold text-[#0B3566]">
-                  {founderProfile.name}
-                </h2>
-                <p className="text-base sm:text-lg font-bold text-[#0799A8] mt-1">
-                  {founderProfile.role}
-                </p>
-                <p className="text-xs sm:text-sm font-semibold text-[#60758A] mt-1.5">
-                  {founderProfile.subtitles.join(' | ')}
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-extrabold uppercase tracking-wider text-[#0B3566] mb-3 flex items-center gap-2">
-                  <Award className="w-4 h-4 text-[#0799A8]" />
-                  <span>Professional Credentials &amp; Achievements</span>
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {founderProfile.credentials.map((cred) => (
-                    <div
-                      key={cred}
-                      className="flex items-start gap-2.5 bg-white/95 rounded-2xl p-3 border border-[#CFEFF3] shadow-2xs"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-[#0799A8] shrink-0 mt-0.5" />
-                      <span className="text-xs sm:text-[13px] font-semibold text-[#0B3566]">
-                        {cred}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <FounderSection />
 
       {/* ==================== HER JOURNEY & WHY SHE STARTED MAMI ==================== */}
       <section className="py-12 sm:py-16 bg-mami-soft-cyan">

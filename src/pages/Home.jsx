@@ -1,6 +1,7 @@
 import Hero from '../components/Hero';
 import ServiceGrid from '../components/ServiceGrid';
 import AboutSection from '../components/AboutSection';
+import FounderSection from '../components/FounderSection';
 import GlobalOpportunities from '../components/GlobalOpportunities';
 import TrainingSection from '../components/TrainingSection';
 import CareersPartnershipsSection from '../components/CareersPartnershipsSection';
@@ -19,6 +20,7 @@ export default function Home() {
       />
       <Hero />
       <AboutSection />
+      <FounderSection />
       <ServiceGrid compact={true} />
       <GlobalOpportunities />
       <TrainingSection />

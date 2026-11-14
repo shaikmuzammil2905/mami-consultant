@@ -4,23 +4,54 @@ import certUaeBusinessImg from '../assets/cert-uae-business.png';
 import awardGroupImg from '../assets/award-dubai-group.png';
 import awardCertImg from '../assets/award-certificate-excellence.png';
 import awardPosterImg from '../assets/award-ramya-poster.png';
+import drRamyakrishnaImg from '../assets/dr-ramyakrishna-founder.jpg';
 
 export const founderProfile = {
   name: 'Dr. Ramyakrishna Mamidala',
+  displayName: 'Dr. Ramyakrishna',
   role: 'Founder & Director – MAMI Career Consultant',
+  roleShort: 'Founder and Director',
+  specialization: 'Senior Neuro Physiotherapist',
   subtitles: [
-    'International Healthcare Professional',
+    'Founder & Director',
     'Senior Neuro Physiotherapist',
-    'Healthcare Entrepreneur',
+    'HCPC (UK) Registered',
+    'DHA (Dubai) Registered',
+    'International Healthcare Entrepreneur',
   ],
-  portrait: awardPosterImg,
+  portrait: drRamyakrishnaImg,
+  awardPoster: awardPosterImg,
+  registrations: [
+    {
+      id: 'hcpc-uk',
+      title: 'HCPC (UK) Registered',
+      fullTitle: 'Health and Care Professions Council (UK) Registered',
+      authority: 'HCPC – United Kingdom',
+      country: 'United Kingdom',
+      flag: '🇬🇧',
+      badge: 'UK Registered Clinician',
+      description: 'Officially registered healthcare professional authorized to practice under UK National Health Service (NHS) & private medical frameworks.',
+    },
+    {
+      id: 'dha-dubai',
+      title: 'DHA (Dubai) Registered',
+      fullTitle: 'Dubai Health Authority (DHA) Licensed Practitioner',
+      authority: 'Dubai Health Authority – UAE',
+      country: 'Dubai, UAE',
+      flag: '🇦🇪',
+      badge: 'Dubai Licensed Specialist',
+      description: 'Fully licensed clinical specialist practicing and advising across leading hospitals, clinics, and healthcare networks in Dubai, UAE.',
+    },
+  ],
   credentials: [
-    'HCPC Registered Physiotherapist – United Kingdom',
-    'DHA Licensed Physiotherapist – Dubai, UAE',
+    'HCPC (UK) Registered Physiotherapist – United Kingdom',
+    'DHA (Dubai) Licensed Physiotherapist – Dubai, UAE',
+    'Senior Neuro Physiotherapist (12+ Years Clinical Practice)',
     'Gold Medalist – United Kingdom',
     'Healthcare Excellence Awardee – Dubai, UAE',
-    'International Healthcare Professional',
-    'Senior Neuro Physiotherapist',
+    'Founder & Director – MAMI Career Consultant & Physio Care',
+    'Trusted Medical Recruiter for UAE & UK Hospital Groups',
+    'Specialist Advisor for Prometric, Dataflow & Licensing Pathways',
   ],
   journey: [
     "Dr. Ramyakrishna Mamidala's journey is built on professional dedication, international experience, determination, and a strong desire to help others.",

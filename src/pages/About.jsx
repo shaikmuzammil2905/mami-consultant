@@ -15,6 +15,7 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
 import CertificationsSection from '../components/CertificationsSection';
+import FounderSection from '../components/FounderSection';
 import FounderGallerySection from '../components/FounderGallerySection';
 import CTASection from '../components/CTASection';
 import aboutImg from '../assets/about-doctor-skyline.jpg';
@@ -194,7 +195,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* Certifications & Recognition Gallery */}
+      {/* Founder Spotlight, Certifications & Recognition Gallery */}
+      <FounderSection />
       <CertificationsSection />
       <FounderGallerySection />
 
