@@ -67,8 +67,13 @@ export default function ServicesManager() {
   };
 
   useEffect(() => {
-    fetchDbServices();
-  }, []);
+    if (liveServices && liveServices.length > 0) {
+      setDbServices(liveServices);
+      setLoading(false);
+    } else {
+      fetchDbServices();
+    }
+  }, [liveServices]);
 
   const handleEdit = (svc) => {
     setFormMsg('');
@@ -111,11 +116,19 @@ export default function ServicesManager() {
     if (!file) return;
 
     setUploadingImage(true);
-    setFormMsg('');
+    setFormMsg('Uploading service picture...');
     try {
       const res = await uploadToCloudinary(file, 'mami_services');
-      setEditingService((prev) => ({ ...prev, image_url: res.url }));
-      setFormMsg('Service picture updated! Remember to click "Save & Publish" to update the website.');
+      const updatedSvc = { ...editingService, image_url: res.url };
+      setEditingService(updatedSvc);
+
+      // Auto-save immediately if editing an existing service
+      if (!isNew && editingService.id) {
+        await saveServiceDirect(updatedSvc);
+        setFormMsg('Service picture updated and published live to website successfully!');
+      } else {
+        setFormMsg('Picture uploaded! Fill service details and click Save & Publish.');
+      }
     } catch (err) {
       setFormMsg('Upload notice: ' + err.message);
     } finally {
@@ -123,8 +136,12 @@ export default function ServicesManager() {
     }
   };
 
-  const handleResetImage = () => {
-    setEditingService((prev) => ({ ...prev, image_url: '' }));
+  const handleResetImage = async () => {
+    const updatedSvc = { ...editingService, image_url: '' };
+    setEditingService(updatedSvc);
+    if (!isNew && editingService.id) {
+      await saveServiceDirect(updatedSvc);
+    }
     setFormMsg('Reset to default service artwork.');
   };
 

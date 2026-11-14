@@ -15,7 +15,7 @@ import { jobs as defaultJobs } from '../../data/jobs';
 import { useSiteContent } from '../../context/ContentContext';
 
 export default function JobsManager() {
-  const { refreshContent, saveJobDirect } = useSiteContent();
+  const { jobs: liveJobs, refreshContent, saveJobDirect } = useSiteContent();
   const [dbJobs, setDbJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingJob, setEditingJob] = useState(null);
@@ -58,8 +58,13 @@ export default function JobsManager() {
   };
 
   useEffect(() => {
-    fetchJobs();
-  }, []);
+    if (liveJobs && liveJobs.length > 0) {
+      setDbJobs(liveJobs);
+      setLoading(false);
+    } else {
+      fetchJobs();
+    }
+  }, [liveJobs]);
 
   const handleEdit = (job) => {
     setFormMsg('');

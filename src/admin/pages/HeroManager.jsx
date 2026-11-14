@@ -7,7 +7,7 @@ import defaultDesktopHero from '../../assets/hero-desktop.png';
 import defaultMobileHero from '../../assets/hero-mobile.png';
 
 export default function HeroManager() {
-  const { refreshContent, saveSectionDirect } = useSiteContent();
+  const { sections, refreshContent, saveSectionDirect } = useSiteContent();
   const [heroData, setHeroData] = useState({
     badge: 'Premier Healthcare Career Consultancy',
     title: 'Navigate Your Global Healthcare Career with Absolute Confidence',
@@ -26,52 +26,66 @@ export default function HeroManager() {
   const [uploadingField, setUploadingField] = useState(null);
   const [saveStatus, setSaveStatus] = useState('');
 
+  // Synchronize state with live content context
   useEffect(() => {
-    async function loadHeroFromDb() {
-      try {
-        const { data, error } = await supabase
-          .from('website_sections')
-          .select('*')
-          .eq('section_id', 'hero')
-          .maybeSingle();
-
-        if (!error && data) {
-          setHeroData((prev) => ({
-            ...prev,
-            badge: data.badge || prev.badge,
-            title: data.title || prev.title,
-            subtitle: data.subtitle || prev.subtitle,
-            description: data.description || prev.description,
-            cta_primary_text: data.cta_primary_text || prev.cta_primary_text,
-            cta_primary_link: data.cta_primary_link || prev.cta_primary_link,
-            cta_secondary_text: data.cta_secondary_text || prev.cta_secondary_text,
-            cta_secondary_link: data.cta_secondary_link || prev.cta_secondary_link,
-            image_url: data.image_url || '',
-            mobile_image_url: data.extra_data?.mobile_image_url || data.background_url || '',
-          }));
-        }
-      } catch (err) {
-        console.warn('Hero load note:', err);
-      }
+    if (sections?.hero) {
+      const h = sections.hero;
+      setHeroData((prev) => ({
+        ...prev,
+        badge: h.badge || prev.badge,
+        title: h.title || prev.title,
+        subtitle: h.subtitle || prev.subtitle,
+        description: h.description || prev.description,
+        cta_primary_text: h.cta_primary_text || prev.cta_primary_text,
+        cta_primary_link: h.cta_primary_link || prev.cta_primary_link,
+        cta_secondary_text: h.cta_secondary_text || prev.cta_secondary_text,
+        cta_secondary_link: h.cta_secondary_link || prev.cta_secondary_link,
+        image_url: h.image_url || prev.image_url || '',
+        mobile_image_url:
+          h.extra_data?.mobile_image_url || h.background_url || prev.mobile_image_url || '',
+      }));
     }
-    loadHeroFromDb();
-  }, []);
+  }, [sections?.hero]);
 
   const handleImageUpload = async (e, field) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploadingField(field);
-    setSaveStatus('');
+    setSaveStatus('Uploading picture...');
     try {
       const res = await uploadToCloudinary(file, 'mami_hero');
-      setHeroData((prev) => ({ ...prev, [field]: res.url }));
-      setSaveStatus('Picture updated successfully! Click "Save & Publish Changes" to apply to live website.');
+      const updatedHero = { ...heroData, [field]: res.url };
+      setHeroData(updatedHero);
+
+      // Auto-save immediately to multi-layer storage & update live website
+      await saveSectionDirect('hero', {
+        ...updatedHero,
+        section_id: 'hero',
+        background_url: updatedHero.mobile_image_url,
+        extra_data: { mobile_image_url: updatedHero.mobile_image_url },
+        is_visible: true,
+      });
+
+      setSaveStatus('Picture changed and published live to website successfully!');
     } catch (err) {
       setSaveStatus('Upload notice: ' + err.message);
     } finally {
       setUploadingField(null);
     }
+  };
+
+  const handleResetPicture = async (field) => {
+    const updatedHero = { ...heroData, [field]: '' };
+    setHeroData(updatedHero);
+    await saveSectionDirect('hero', {
+      ...updatedHero,
+      section_id: 'hero',
+      background_url: updatedHero.mobile_image_url,
+      extra_data: { mobile_image_url: updatedHero.mobile_image_url },
+      is_visible: true,
+    });
+    setSaveStatus('Picture reset to default and published to website!');
   };
 
   const handleSave = async (e) => {
@@ -182,8 +196,8 @@ export default function HeroManager() {
               {heroData.image_url && (
                 <button
                   type="button"
-                  onClick={() => setHeroData({ ...heroData, image_url: '' })}
-                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1"
+                  onClick={() => handleResetPicture('image_url')}
+                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1 cursor-pointer"
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Reset Default</span>
@@ -226,8 +240,8 @@ export default function HeroManager() {
               {heroData.mobile_image_url && (
                 <button
                   type="button"
-                  onClick={() => setHeroData({ ...heroData, mobile_image_url: '' })}
-                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1"
+                  onClick={() => handleResetPicture('mobile_image_url')}
+                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1 cursor-pointer"
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Reset Default</span>

@@ -6,7 +6,7 @@ import { useSiteContent } from '../../context/ContentContext';
 import defaultAboutImg from '../../assets/about-doctor-skyline.jpg';
 
 export default function AboutManager() {
-  const { refreshContent, saveSectionDirect } = useSiteContent();
+  const { sections, refreshContent, saveSectionDirect } = useSiteContent();
   const [aboutData, setAboutData] = useState({
     badge: 'About MAMI Career Consultant',
     title: 'Your Trusted Bridge to International Healthcare Systems',
@@ -22,49 +22,58 @@ export default function AboutManager() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
 
+  // Synchronize state with live content context
   useEffect(() => {
-    async function loadAboutFromDb() {
-      try {
-        const { data, error } = await supabase
-          .from('website_sections')
-          .select('*')
-          .eq('section_id', 'about')
-          .maybeSingle();
-
-        if (!error && data) {
-          setAboutData((prev) => ({
-            ...prev,
-            badge: data.badge || prev.badge,
-            title: data.title || prev.title,
-            subtitle: data.subtitle || prev.subtitle,
-            description: data.description || prev.description,
-            cta_primary_text: data.cta_primary_text || prev.cta_primary_text,
-            cta_primary_link: data.cta_primary_link || prev.cta_primary_link,
-            image_url: data.image_url || '',
-          }));
-        }
-      } catch (err) {
-        console.warn('About load note:', err);
-      }
+    if (sections?.about) {
+      const a = sections.about;
+      setAboutData((prev) => ({
+        ...prev,
+        badge: a.badge || prev.badge,
+        title: a.title || prev.title,
+        subtitle: a.subtitle || prev.subtitle,
+        description: a.description || prev.description,
+        cta_primary_text: a.cta_primary_text || prev.cta_primary_text,
+        cta_primary_link: a.cta_primary_link || prev.cta_primary_link,
+        image_url: a.image_url || prev.image_url || '',
+      }));
     }
-    loadAboutFromDb();
-  }, []);
+  }, [sections?.about]);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploadingImage(true);
-    setSaveStatus('');
+    setSaveStatus('Uploading picture...');
     try {
       const res = await uploadToCloudinary(file, 'mami_about');
-      setAboutData((prev) => ({ ...prev, image_url: res.url }));
-      setSaveStatus('About picture updated! Click "Save & Publish Changes" to apply.');
+      const updated = { ...aboutData, image_url: res.url };
+      setAboutData(updated);
+
+      // Auto-save immediately to multi-layer storage & update live website
+      await saveSectionDirect('about', {
+        ...updated,
+        section_id: 'about',
+        is_visible: true,
+      });
+
+      setSaveStatus('About picture updated and published live to website successfully!');
     } catch (err) {
       setSaveStatus('Notice: ' + err.message);
     } finally {
       setUploadingImage(false);
     }
+  };
+
+  const handleResetPicture = async () => {
+    const updated = { ...aboutData, image_url: '' };
+    setAboutData(updated);
+    await saveSectionDirect('about', {
+      ...updated,
+      section_id: 'about',
+      is_visible: true,
+    });
+    setSaveStatus('About picture reset to default and published to website!');
   };
 
   const handleSave = async (e) => {
@@ -158,8 +167,8 @@ export default function AboutManager() {
               {aboutData.image_url && (
                 <button
                   type="button"
-                  onClick={() => setAboutData({ ...aboutData, image_url: '' })}
-                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1 px-2 py-1"
+                  onClick={handleResetPicture}
+                  className="text-xs text-gray-500 hover:text-red-600 flex items-center gap-1 px-2 py-1 cursor-pointer"
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Reset Default</span>

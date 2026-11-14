@@ -6,7 +6,7 @@ import { useSiteContent } from '../../context/ContentContext';
 import { siteConfig } from '../../data/siteConfig';
 
 export default function HeaderNavManager() {
-  const { refreshContent, saveSettingsDirect } = useSiteContent();
+  const { siteSettings, refreshContent, saveSettingsDirect } = useSiteContent();
   const [settings, setSettings] = useState({
     brand_name: 'MAMI Career Consultant',
     brand_short: 'MAMI',
@@ -21,43 +21,36 @@ export default function HeaderNavManager() {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
 
+  // Synchronize state with live content context
   useEffect(() => {
-    async function loadSettings() {
-      try {
-        const { data, error } = await supabase
-          .from('site_settings')
-          .select('*')
-          .eq('id', 'global')
-          .maybeSingle();
-
-        if (!error && data) {
-          setSettings({
-            brand_name: data.brand_name || 'MAMI Career Consultant',
-            brand_short: data.brand_short || 'MAMI',
-            header_cta_text: data.header_cta_text || 'Enquire Now',
-            header_cta_link: data.header_cta_link || '/contact',
-            announcement_text: data.announcement_text || '',
-            announcement_enabled: data.announcement_enabled ?? true,
-            logo_url: data.logo_url || '',
-          });
-        }
-      } catch (err) {
-        console.warn('Settings load note:', err);
-      }
+    if (siteSettings) {
+      setSettings((prev) => ({
+        ...prev,
+        brand_name: siteSettings.brand_name || prev.brand_name,
+        brand_short: siteSettings.brand_short || prev.brand_short,
+        header_cta_text: siteSettings.header_cta_text || prev.header_cta_text,
+        header_cta_link: siteSettings.header_cta_link || prev.header_cta_link,
+        announcement_text: siteSettings.announcement_text ?? prev.announcement_text,
+        announcement_enabled: siteSettings.announcement_enabled ?? prev.announcement_enabled,
+        logo_url: siteSettings.logo_url || prev.logo_url || '',
+      }));
     }
-    loadSettings();
-  }, []);
+  }, [siteSettings]);
 
   const handleLogoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploadingLogo(true);
-    setSaveStatus('');
+    setSaveStatus('Uploading logo...');
     try {
       const res = await uploadToCloudinary(file, 'mami_branding');
-      setSettings((prev) => ({ ...prev, logo_url: res.url }));
-      setSaveStatus('Logo picture selected! Click "Save & Publish Header" to apply changes.');
+      const updated = { ...settings, logo_url: res.url };
+      setSettings(updated);
+
+      // Auto-save immediately to multi-layer storage & update live header
+      await saveSettingsDirect(updated);
+      setSaveStatus('Logo updated and published live to website successfully!');
     } catch (err) {
       setSaveStatus('Upload notice: ' + err.message);
     } finally {
@@ -65,9 +58,11 @@ export default function HeaderNavManager() {
     }
   };
 
-  const handleResetLogo = () => {
-    setSettings((prev) => ({ ...prev, logo_url: '' }));
-    setSaveStatus('Reset to default transparent MAMI brand logo.');
+  const handleResetLogo = async () => {
+    const updated = { ...settings, logo_url: '' };
+    setSettings(updated);
+    await saveSettingsDirect(updated);
+    setSaveStatus('Logo reset to default brand logo and published to website!');
   };
 
   const handleSave = async (e) => {

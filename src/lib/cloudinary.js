@@ -7,7 +7,7 @@
 export function getCloudinaryConfig() {
   const envCloud = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '';
   const storedCloud = typeof window !== 'undefined' ? localStorage.getItem('mami_cloudinary_cloud_name') : '';
-  const cloudName = storedCloud || envCloud || '';
+  const cloudName = storedCloud || envCloud || 'dctgsrki';
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'ml-default';
 
   return {
