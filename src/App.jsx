@@ -91,43 +91,49 @@ function AppShell() {
   const [showSplash, setShowSplash] = useState(() => {
     if (typeof window === 'undefined') return false;
     if (window.location.pathname.startsWith('/admin')) return false;
-    const seen = sessionStorage.getItem('mami_splash_seen');
-    if (seen) return false;
-    sessionStorage.setItem('mami_splash_seen', '1');
-    return true;
+    try {
+      const seen = sessionStorage.getItem('mami_splash_seen');
+      if (seen) return false;
+      sessionStorage.setItem('mami_splash_seen', '1');
+      return true;
+    } catch {
+      return false;
+    }
   });
 
   // Admin Route Layout (Separate dedicated admin console without public header/footer)
   if (isAdminRoute) {
     return (
-      <Suspense fallback={<PageLoadingFallback />}>
-        <Routes>
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin"
-            element={
-              <AdminProtectedRoute>
-                <AdminLayout />
-              </AdminProtectedRoute>
-            }
-          >
-            <Route index element={<AdminDashboard />} />
-            <Route path="inquiries" element={<InquiriesManager />} />
-            <Route path="applications" element={<ApplicationsManager />} />
-            <Route path="collaborations" element={<CollaborationManager />} />
-            <Route path="services" element={<ServicesManager />} />
-            <Route path="hero" element={<HeroManager />} />
-            <Route path="about" element={<AboutManager />} />
-            <Route path="jobs" element={<JobsManager />} />
-            <Route path="testimonials" element={<TestimonialsManager />} />
-            <Route path="header" element={<HeaderNavManager />} />
-            <Route path="media" element={<MediaLibrary />} />
-            <Route path="settings" element={<SettingsManager />} />
-            <Route path="seo" element={<SeoManager />} />
-          </Route>
-          <Route path="*" element={<AdminLogin />} />
-        </Routes>
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<PageLoadingFallback />}>
+          <Routes>
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminProtectedRoute>
+                  <AdminLayout />
+                </AdminProtectedRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="inquiries" element={<InquiriesManager />} />
+              <Route path="applications" element={<ApplicationsManager />} />
+              <Route path="collaborations" element={<CollaborationManager />} />
+              <Route path="services" element={<ServicesManager />} />
+              <Route path="hero" element={<HeroManager />} />
+              <Route path="about" element={<AboutManager />} />
+              <Route path="jobs" element={<JobsManager />} />
+              <Route path="testimonials" element={<TestimonialsManager />} />
+              <Route path="header" element={<HeaderNavManager />} />
+              <Route path="media" element={<MediaLibrary />} />
+              <Route path="settings" element={<SettingsManager />} />
+              <Route path="seo" element={<SeoManager />} />
+            </Route>
+            <Route path="*" element={<AdminLogin />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     );
   }
 
@@ -189,14 +195,16 @@ function AppShell() {
 
 export default function App() {
   return (
-    <MotionConfig reducedMotion="user">
-      <ContentProvider>
-        <AdminAuthProvider>
-          <ModalProvider>
-            <AppShell />
-          </ModalProvider>
-        </AdminAuthProvider>
-      </ContentProvider>
-    </MotionConfig>
+    <ErrorBoundary>
+      <MotionConfig reducedMotion="user">
+        <ContentProvider>
+          <AdminAuthProvider>
+            <ModalProvider>
+              <AppShell />
+            </ModalProvider>
+          </AdminAuthProvider>
+        </ContentProvider>
+      </MotionConfig>
+    </ErrorBoundary>
   );
 }

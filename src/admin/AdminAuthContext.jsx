@@ -3,35 +3,110 @@ import { supabase } from '../lib/supabase';
 
 const AdminAuthContext = createContext(null);
 
+function safeStorageGet(key) {
+  if (typeof window === 'undefined') return null;
+  try {
+    return sessionStorage.getItem(key);
+  } catch (e) {
+    return null;
+  }
+}
+
+function safeStorageSet(key, value) {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.setItem(key, value);
+  } catch (e) {
+    console.warn('Storage write notice:', e);
+  }
+}
+
+function safeStorageRemove(key) {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.removeItem(key);
+  } catch (e) {}
+}
+
 export function AdminAuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    const stored = safeStorageGet('mami_admin_session');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  });
+
+  const [session, setSession] = useState(() => {
+    const stored = safeStorageGet('mami_admin_session');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        return { user: parsed, access_token: 'local-session-active' };
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  });
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // 1. Get initial session
-    supabase.auth
-      .getSession()
-      .then(({ data: { session } }) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.warn('Supabase auth getSession note:', err);
-        setLoading(false);
-      });
+    let isMounted = true;
+
+    // Safety timeout to ensure loading state never hangs
+    const safetyTimer = setTimeout(() => {
+      if (isMounted) setLoading(false);
+    }, 2000);
+
+    // 1. Get initial session from Supabase
+    try {
+      supabase.auth
+        .getSession()
+        .then(({ data }) => {
+          if (!isMounted) return;
+          const currentSession = data?.session ?? null;
+          if (currentSession) {
+            setSession(currentSession);
+            setUser(currentSession.user ?? null);
+          }
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.warn('Supabase auth getSession note:', err);
+          if (isMounted) setLoading(false);
+        });
+    } catch (e) {
+      console.warn('Supabase getSession sync note:', e);
+      if (isMounted) setLoading(false);
+    }
 
     // 2. Listen for auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    let subscription = null;
+    try {
+      const authListener = supabase.auth.onAuthStateChange((_event, newSession) => {
+        if (!isMounted) return;
+        setSession(newSession);
+        setUser(newSession?.user ?? null);
+        setLoading(false);
+      });
+      subscription = authListener?.data?.subscription;
+    } catch (err) {
+      console.warn('Supabase onAuthStateChange error:', err);
+    }
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      clearTimeout(safetyTimer);
+      try {
+        subscription?.unsubscribe?.();
+      } catch (e) {}
+    };
   }, []);
 
   const login = async (email, password) => {
@@ -63,7 +138,7 @@ export function AdminAuthProvider({ children }) {
       }
 
       if (error) {
-        // Fallback for initial setup if admin hasn't created a user in Supabase Auth console yet
+        // Fallback for initial setup if admin credentials match master login
         if (
           (email.trim().toLowerCase() === 'admin@mamiconsultant.com' ||
             email.trim().toLowerCase() === 'admin@mami.com') &&
@@ -76,9 +151,7 @@ export function AdminAuthProvider({ children }) {
           };
           setUser(mockUser);
           setSession({ user: mockUser, access_token: 'local-session-active' });
-          if (typeof window !== 'undefined') {
-            sessionStorage.setItem('mami_admin_session', JSON.stringify(mockUser));
-          }
+          safeStorageSet('mami_admin_session', JSON.stringify(mockUser));
           return { data: { user: mockUser }, error: null };
         }
         throw error;
@@ -86,6 +159,7 @@ export function AdminAuthProvider({ children }) {
 
       setUser(data.user);
       setSession(data.session);
+      safeStorageSet('mami_admin_session', JSON.stringify(data.user));
       return { data, error: null };
     } catch (err) {
       return { data: null, error: err };
@@ -100,26 +174,10 @@ export function AdminAuthProvider({ children }) {
     } catch (err) {
       console.warn('Sign out notice:', err);
     }
-    if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('mami_admin_session');
-    }
+    safeStorageRemove('mami_admin_session');
     setUser(null);
     setSession(null);
   };
-
-  // Check persisted session on reload
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !user) {
-      const stored = sessionStorage.getItem('mami_admin_session');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          setUser(parsed);
-          setSession({ user: parsed, access_token: 'local-session-active' });
-        } catch {}
-      }
-    }
-  }, [user]);
 
   return (
     <AdminAuthContext.Provider

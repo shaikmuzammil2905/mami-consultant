@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MessageCircle, Send, CheckCircle2, Upload } from 'lucide-react';
-import { getWhatsAppUrl } from '../data/siteConfig';
+import { siteConfig, getWhatsAppIndiaUrl, getWhatsAppUAEUrl } from '../data/siteConfig';
 import { useSiteContent } from '../context/ContentContext';
 
 const MODAL_TITLES = {
@@ -165,25 +165,33 @@ export default function PopupModal({ isOpen, type, payload, onClose }) {
                   </div>
                   <h4 className="text-xl font-bold text-[#0B3566]">Thank You, {form.name}!</h4>
                   <p className="text-sm text-[#173B63]/85 max-w-sm mx-auto">
-                    Your enquiry has been recorded. Our healthcare career consultants will contact you shortly on{' '}
-                    <span className="font-semibold text-[#007C91]">{form.phone}</span>.
+                    Your enquiry has been successfully recorded. Connect directly with our healthcare career advisors below:
                   </p>
-                  <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+                  <div className="pt-2 flex flex-col gap-2.5 max-w-xs mx-auto">
                     <a
-                      href={getWhatsAppUrl(whatsappText)}
+                      href={getWhatsAppIndiaUrl(whatsappText)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] text-white font-semibold text-sm hover:opacity-95 transition-opacity"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] text-white font-bold text-xs hover:opacity-95 shadow-sm transition-opacity"
                     >
-                      <MessageCircle className="w-4 h-4" />
-                      <span>Continue on WhatsApp</span>
+                      <MessageCircle className="w-4 h-4 fill-current" />
+                      <span>WhatsApp India (+91 9154605599)</span>
+                    </a>
+                    <a
+                      href={getWhatsAppUAEUrl(whatsappText)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#128C7E] text-white font-bold text-xs hover:opacity-95 shadow-sm transition-opacity"
+                    >
+                      <MessageCircle className="w-4 h-4 fill-current" />
+                      <span>WhatsApp UAE (+971 569069289)</span>
                     </a>
                     <button
                       type="button"
                       onClick={onClose}
-                      className="px-5 py-2.5 rounded-full border border-[#CFEFF3] text-[#0B3566] font-semibold text-sm hover:bg-[#EAFBFD] cursor-pointer"
+                      className="mt-1 px-4 py-2 rounded-xl border border-gray-200 text-gray-600 font-semibold text-xs hover:bg-gray-50 cursor-pointer"
                     >
-                      Close
+                      Close Window
                     </button>
                   </div>
                 </div>
@@ -212,7 +220,7 @@ export default function PopupModal({ isOpen, type, payload, onClose }) {
                         type="tel"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        placeholder="+91 9533079819"
+                        placeholder="+91 9154605599"
                         className="w-full px-3.5 py-2.5 rounded-xl border border-[#CFEFF3] text-sm focus:outline-none focus:border-[#0799A8] focus:ring-2 focus:ring-[#0799A8]/15"
                       />
                       {errors.phone && <p className="text-xs text-rose-600 mt-1">{errors.phone}</p>}

@@ -7,15 +7,18 @@ import { useSiteContent } from '../../context/ContentContext';
 export default function SettingsManager() {
   const { refreshContent } = useSiteContent();
   const [settings, setSettings] = useState({
-    phone: '+91 9533079819',
-    whatsapp: '+91 9533079819',
+    phone: '+91 9154605599',
+    phone_uae: '+971 569069289',
+    whatsapp: '+91 9154605599',
+    whatsapp_uae: '+971 569069289',
     email: 'contact@mamiconsultant.com',
     address: 'Rajiv Swagruha Township, Bandlaguda, Nagole, Hyderabad, Telangana, India',
     owner_name: 'Dr. Ramyakrishna Mamidala',
     footer_text:
       'MAMI Career Consultant empowers healthcare professionals across India with genuine, transparent international licensing, exam preparation, verification, and recruitment services.',
     social_links: {
-      whatsapp: 'https://wa.me/919533079819',
+      whatsapp: 'https://wa.me/919154605599',
+      whatsapp_uae: 'https://wa.me/971569069289',
       instagram: 'https://instagram.com/mami_career_consultant',
       facebook: 'https://facebook.com/mamiconsultant',
       linkedin: 'https://linkedin.com/company/mami-career-consultant',
@@ -41,8 +44,10 @@ export default function SettingsManager() {
 
         if (!error && data) {
           setSettings({
-            phone: data.phone || '+91 9533079819',
-            whatsapp: data.whatsapp || '+91 9533079819',
+            phone: data.phone || '+91 9154605599',
+            phone_uae: data.phone_uae || '+971 569069289',
+            whatsapp: data.whatsapp || '+91 9154605599',
+            whatsapp_uae: data.whatsapp_uae || '+971 569069289',
             email: data.email || 'contact@mamiconsultant.com',
             address: data.address || '',
             owner_name: data.owner_name || 'Dr. Ramyakrishna Mamidala',

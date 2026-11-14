@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle2, MessageCircle, ArrowLeft } from 'lucide-react';
-import { getWhatsAppUrl } from '../data/siteConfig';
+import { siteConfig, getWhatsAppIndiaUrl, getWhatsAppUAEUrl } from '../data/siteConfig';
 
 export default function SuccessState({
   title,
@@ -40,20 +40,31 @@ export default function SuccessState({
         </div>
       )}
 
+      {/* Dual WhatsApp Integration Buttons (India & UAE) */}
       <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
         <a
-          href={getWhatsAppUrl(whatsappMessage)}
+          href={getWhatsAppIndiaUrl(whatsappMessage)}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#25D366] text-white font-semibold text-sm shadow-md hover:opacity-95 transition-opacity"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#25D366] text-white font-bold text-xs shadow-md hover:opacity-95 transition-opacity"
         >
-          <MessageCircle className="w-4 h-4" />
-          <span>{whatsappLabel}</span>
+          <MessageCircle className="w-4 h-4 fill-current" />
+          <span>WhatsApp India (+91 9154605599)</span>
+        </a>
+
+        <a
+          href={getWhatsAppUAEUrl(whatsappMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#128C7E] text-white font-bold text-xs shadow-md hover:opacity-95 transition-opacity"
+        >
+          <MessageCircle className="w-4 h-4 fill-current" />
+          <span>WhatsApp UAE (+971 569069289)</span>
         </a>
 
         <Link
           to={backTo}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white border border-[#8AD7E0] text-[#0B3566] font-semibold text-sm hover:bg-[#EAFBFD] transition-colors"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white border border-[#8AD7E0] text-[#0B3566] font-semibold text-xs hover:bg-[#EAFBFD] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{backLabel}</span>

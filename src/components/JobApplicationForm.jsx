@@ -213,7 +213,7 @@ export default function JobApplicationForm({
               required
               value={form.mobile}
               onChange={(e) => updateField('mobile', e.target.value)}
-              placeholder="+91 9533079819"
+              placeholder="+91 9154605599"
               error={errors.mobile}
             />
             <FormInput

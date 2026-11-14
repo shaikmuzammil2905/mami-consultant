@@ -8,14 +8,36 @@ export const siteConfig = {
   brandName: 'MAMI',
   subtitle: 'Career Consultant & Physio Care',
   owner: 'Dr. Ramyakrishna',
-  phone: '+91 9533079819',
-  phoneHref: 'tel:+919533079819',
-  whatsappNumber: '919533079819',
-  whatsappDisplay: '+91 9533079819',
+
+  // India Contact (+91 9154605599)
+  phoneIndia: '+91 9154605599',
+  phoneIndiaHref: 'tel:+919154605599',
+  whatsappIndiaNumber: '919154605599',
+  whatsappIndiaDisplay: '+91 9154605599',
+
+  // UAE / Dubai Contact (+971 569069289)
+  phoneUAE: '+971 569069289',
+  phoneUAEHref: 'tel:+971569069289',
+  whatsappUAENumber: '971569069289',
+  whatsappUAEDisplay: '+971 569069289',
+
+  // Primary Default Contact (India)
+  phone: '+91 9154605599',
+  phoneHref: 'tel:+919154605599',
+  whatsappNumber: '919154605599',
+  whatsappDisplay: '+91 9154605599',
+
+  // Secondary UAE Contact
+  phoneSecondary: '+971 569069289',
+  phoneSecondaryHref: 'tel:+971569069289',
+  whatsappSecondaryNumber: '971569069289',
+  whatsappSecondaryDisplay: '+971 569069289',
+
   email: 'info@mami.in',
-  emailDisplay: 'info@mami.in (Coming Soon)',
-  emailNote: 'To be updated',
-  address: 'Rajiv Swagruha Township, Bandlaguda, Nagole, Hyderabad.',
+  emailDisplay: 'info@mami.in',
+  emailNote: 'Official Enquiries',
+  address: 'Rajiv Swagruha Township, Bandlaguda, Nagole, Hyderabad, India.',
+  addressUAE: 'Dubai Healthcare City / Al Garhoud, Dubai, UAE.',
   tagline: 'Clear Guidance • Proper Documentation • Global Career Support.',
   defaultWhatsAppMessage:
     'Hello MAMI Career Consultant, I would like to know more about your international healthcare career services.',
@@ -99,8 +121,20 @@ export const siteConfig = {
   ],
 };
 
-export function getWhatsAppUrl(customMessage) {
+export function getWhatsAppUrl(customMessage, destination = 'india') {
   const msg = encodeURIComponent(customMessage || siteConfig.defaultWhatsAppMessage);
-  return `https://wa.me/${siteConfig.whatsappNumber}?text=${msg}`;
+  const number =
+    destination === 'uae'
+      ? siteConfig.whatsappUAENumber
+      : siteConfig.whatsappIndiaNumber;
+  return `https://wa.me/${number}?text=${msg}`;
+}
+
+export function getWhatsAppIndiaUrl(customMessage) {
+  return getWhatsAppUrl(customMessage, 'india');
+}
+
+export function getWhatsAppUAEUrl(customMessage) {
+  return getWhatsAppUrl(customMessage, 'uae');
 }
 

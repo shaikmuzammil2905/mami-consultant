@@ -126,25 +126,44 @@ export default function Footer() {
             <h3 className="text-base font-bold text-white mb-3.5">Contact Us</h3>
             <ul className="space-y-3 text-sm text-white/90">
               <li>
-                <a href={siteConfig.phoneHref} className="flex items-center gap-2.5 hover:text-[#7DE8F0]">
-                  <Phone className="w-4 h-4 text-[#2ABCC2] shrink-0" />
-                  <span>{siteConfig.phone}</span>
-                </a>
+                <div className="text-[11px] font-bold text-amber-200 tracking-wider mb-1">INDIA HELPLINE</div>
+                <div className="flex items-center gap-2">
+                  <a href={siteConfig.phoneIndiaHref} className="flex items-center gap-2 hover:text-[#7DE8F0]">
+                    <Phone className="w-3.5 h-3.5 text-[#2ABCC2] shrink-0" />
+                    <span>{siteConfig.phoneIndia}</span>
+                  </a>
+                  <a
+                    href={siteConfig.getWhatsAppIndiaUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#25D366] hover:text-white transition-colors"
+                    title="WhatsApp India Helpline"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 fill-current" />
+                  </a>
+                </div>
               </li>
               <li>
-                <a
-                  href={getWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 hover:text-[#7DE8F0]"
-                >
-                  <MessageCircle className="w-4 h-4 text-[#2ABCC2] shrink-0" />
-                  <span>{siteConfig.whatsappDisplay}</span>
-                </a>
+                <div className="text-[11px] font-bold text-emerald-200 tracking-wider mb-1">UAE / DUBAI OFFICE</div>
+                <div className="flex items-center gap-2">
+                  <a href={siteConfig.phoneUAEHref} className="flex items-center gap-2 hover:text-[#7DE8F0]">
+                    <Phone className="w-3.5 h-3.5 text-[#2ABCC2] shrink-0" />
+                    <span>{siteConfig.phoneUAE}</span>
+                  </a>
+                  <a
+                    href={siteConfig.getWhatsAppUAEUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#25D366] hover:text-white transition-colors"
+                    title="WhatsApp UAE Helpline"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 fill-current" />
+                  </a>
+                </div>
               </li>
-              <li className="flex items-start gap-2.5">
+              <li className="flex items-start gap-2.5 pt-1">
                 <MapPin className="w-4 h-4 text-[#2ABCC2] shrink-0 mt-0.5" />
-                <span className="leading-snug text-white/85">{siteConfig.address}</span>
+                <span className="leading-snug text-white/85 text-xs">{siteConfig.address}</span>
               </li>
             </ul>
           </div>
