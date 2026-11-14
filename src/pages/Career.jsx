@@ -5,10 +5,12 @@ import { ArrowRight, MessageCircle, Briefcase, CheckCircle2, Globe } from 'lucid
 import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
 import JobCard from '../components/JobCard';
-import { jobs, jobCategories } from '../data/jobs';
+import { jobs as defaultJobs, jobCategories } from '../data/jobs';
 import { getWhatsAppUrl, siteConfig } from '../data/siteConfig';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function Career() {
+  const { jobs = defaultJobs } = useSiteContent();
   const [professionFilter, setProfessionFilter] = useState('All');
   const [countryFilter, setCountryFilter] = useState('All');
 

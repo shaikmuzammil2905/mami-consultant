@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MessageCircle, Send, CheckCircle2, Upload } from 'lucide-react';
 import { getWhatsAppUrl } from '../data/siteConfig';
+import { useSiteContent } from '../context/ContentContext';
 
 const MODAL_TITLES = {
   enquiry: {
@@ -27,6 +28,7 @@ const MODAL_TITLES = {
 };
 
 export default function PopupModal({ isOpen, type, payload, onClose }) {
+  const { submitInquiry } = useSiteContent();
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -40,6 +42,7 @@ export default function PopupModal({ isOpen, type, payload, onClose }) {
   });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -82,10 +85,27 @@ export default function PopupModal({ isOpen, type, payload, onClose }) {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      await submitInquiry({
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        profession: form.profession,
+        service: payload?.serviceName || payload?.courseName || form.service,
+        country: payload?.country || form.country,
+        message: form.message,
+        sourcePage: `Popup Modal: ${type}`,
+      });
+    } catch (err) {
+      console.warn('Modal submit note:', err);
+    } finally {
+      setSubmitting(false);
+      setSubmitted(true);
+    }
   };
 
   const whatsappText = `Hello MAMI Career Consultant, my name is ${form.name || 'a healthcare professional'}. Profession: ${form.profession}. Interested in: ${

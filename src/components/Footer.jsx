@@ -2,9 +2,17 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, MessageCircle, MapPin, Facebook, Linkedin, Youtube, ChevronDown, ChevronRight } from 'lucide-react';
 import { siteConfig, getWhatsAppUrl } from '../data/siteConfig';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function Footer() {
+  const { siteSettings } = useSiteContent();
   const [openAccordion, setOpenAccordion] = useState(null);
+
+  const phone = siteSettings?.phone || siteConfig.phone;
+  const whatsapp = siteSettings?.whatsapp || siteConfig.whatsapp;
+  const email = siteSettings?.email || siteConfig.email;
+  const address = siteSettings?.address || siteConfig.address;
+  const footerSummary = siteSettings?.footer_text || siteConfig.tagline;
 
   const toggleAccordion = (key) => {
     setOpenAccordion((prev) => (prev === key ? null : key));

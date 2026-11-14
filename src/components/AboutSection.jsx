@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
-import aboutImg from '../assets/about-doctor-skyline.jpg';
+import defaultAboutImg from '../assets/about-doctor-skyline.jpg';
 import { siteConfig } from '../data/siteConfig';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function AboutSection() {
+  const { sections } = useSiteContent();
+  const aboutDb = sections?.about;
+  const imageSrc = aboutDb?.image_url || defaultAboutImg;
+  const description =
+    aboutDb?.description ||
+    'MAMI Career Consultant is an international healthcare career consultancy dedicated to helping doctors, nurses, physiotherapists and other allied healthcare professionals achieve their global career ambitions.';
   return (
     <section className="py-10 sm:py-14 bg-gradient-to-b from-[#FFFFFF] via-[#F3FCFD] to-[#EAFBFD]">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">
@@ -19,7 +26,7 @@ export default function AboutSection() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-xl border-2 border-white bg-[#EAFBFD]">
               <img
-                src={aboutImg}
+                src={imageSrc}
                 alt="Healthcare professional looking toward international city skyline and airplane"
                 className="w-full aspect-[16/10] lg:aspect-[4/3] object-cover hover:scale-[1.03] transition-transform duration-700"
               />
@@ -36,10 +43,16 @@ export default function AboutSection() {
             className="lg:col-span-4 space-y-4"
           >
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B3566]">
-              About <span className="text-[#0799A8]">MAMI</span>
+              {aboutDb?.title ? (
+                aboutDb.title
+              ) : (
+                <>
+                  About <span className="text-[#0799A8]">MAMI</span>
+                </>
+              )}
             </h2>
             <p className="text-sm sm:text-[15px] text-[#173B63]/90 leading-relaxed">
-              MAMI Career Consultant is an international healthcare career consultancy dedicated to helping doctors, nurses, physiotherapists and other allied healthcare professionals achieve their global career ambitions.
+              {description}
             </p>
             <p className="text-sm sm:text-[15px] text-[#173B63]/90 leading-relaxed">
               We provide comprehensive support for healthcare licensing registration, examination preparation, documentation and international job assistance.

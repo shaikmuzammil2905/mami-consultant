@@ -4,9 +4,11 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { motion } from 'framer-motion';
 import SectionHeading from './SectionHeading';
-import { testimonials } from '../data/testimonials';
+import { testimonials as defaultTestimonials } from '../data/testimonials';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function TestimonialSlider() {
+  const { testimonials = defaultTestimonials } = useSiteContent();
   return (
     <section className="py-10 sm:py-14 bg-white">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6">

@@ -1,16 +1,45 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Plane } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { siteConfig } from '../data/siteConfig';
 import { useModal } from '../context/ModalContext';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function Hero() {
   const [activeSlide, setActiveSlide] = useState(0);
   const { openModal } = useModal();
   const prefersReducedMotion = useReducedMotion();
-  const slides = siteConfig.heroSlides;
-  const current = slides[activeSlide];
+  const { sections } = useSiteContent();
+  const heroDb = sections?.hero;
+
+  const slides = useMemo(() => {
+    const base = siteConfig.heroSlides;
+    if (!heroDb) return base;
+    return base.map((slide, idx) => {
+      if (idx === 0) {
+        return {
+          ...slide,
+          badge: heroDb.badge || slide.badge,
+          headingHighlight: heroDb.title ? heroDb.title.split(' ')[0] + ' ' : slide.headingHighlight,
+          headingStart: '',
+          headingEnd: heroDb.title ? heroDb.title.split(' ').slice(1).join(' ') : slide.headingEnd,
+          tagline: heroDb.subtitle || slide.tagline,
+          description: heroDb.description || slide.description,
+          primaryCta: {
+            label: heroDb.cta_primary_text || slide.primaryCta.label,
+            to: heroDb.cta_primary_link || slide.primaryCta.to,
+          },
+          secondaryCta: heroDb.cta_secondary_text
+            ? { label: heroDb.cta_secondary_text, to: heroDb.cta_secondary_link || '/why-choose-us' }
+            : slide.secondaryCta,
+        };
+      }
+      return slide;
+    });
+  }, [heroDb]);
+
+  const current = slides[activeSlide] || slides[0];
 
   useEffect(() => {
     const interval = setInterval(() => {

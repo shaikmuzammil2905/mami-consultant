@@ -4,6 +4,7 @@ import { ChevronDown, ArrowRight, Menu, X, Phone, MessageCircle } from 'lucide-r
 import { AnimatePresence, motion } from 'framer-motion';
 import { siteConfig, getWhatsAppUrl } from '../data/siteConfig';
 import { useModal } from '../context/ModalContext';
+import { useSiteContent } from '../context/ContentContext';
 
 const serviceLinks = [
   { label: 'Healthcare Licensing Services', to: '/services/healthcare-licensing' },
@@ -22,6 +23,7 @@ const trainingLinks = [
 ];
 
 export default function Header() {
+  const { siteSettings } = useSiteContent();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -29,6 +31,9 @@ export default function Header() {
   const dropdownTimerRef = useRef(null);
   const location = useLocation();
   const { openModal } = useModal();
+
+  const logoSrc = siteSettings?.logo_url || siteConfig.logo;
+  const ctaText = siteSettings?.header_cta_text || 'Enquire Now';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -77,7 +82,7 @@ export default function Header() {
             aria-label="MAMI Career Consultant Home"
           >
             <img
-              src={siteConfig.logo}
+              src={logoSrc}
               alt="MAMI Career Consultant & Physio Care"
               className={`w-auto object-contain transition-all duration-300 ${
                 scrolled ? 'h-9 xl:h-11 2xl:h-12' : 'h-10 xl:h-12 2xl:h-13'
@@ -217,7 +222,7 @@ export default function Header() {
               onClick={() => openModal('enquiry', { source: 'Header Button' })}
               className="hidden lg:inline-flex items-center gap-1 px-2.5 xl:px-4 2xl:px-5 py-1.5 xl:py-2 2xl:py-2.5 rounded-full bg-gradient-to-r from-[#0799A8] to-[#007C91] text-white font-semibold text-[11px] xl:text-xs 2xl:text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer group whitespace-nowrap"
             >
-              <span>Enquire Now</span>
+              <span>{ctaText}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
 

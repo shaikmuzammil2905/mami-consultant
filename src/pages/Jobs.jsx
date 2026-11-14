@@ -5,9 +5,11 @@ import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import CTASection from '../components/CTASection';
 import JobCard from '../components/JobCard';
-import { jobs, jobCategories } from '../data/jobs';
+import { jobs as defaultJobs, jobCategories } from '../data/jobs';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function Jobs() {
+  const { jobs = defaultJobs } = useSiteContent();
   const [professionFilter, setProfessionFilter] = useState('All');
   const [countryFilter, setCountryFilter] = useState('All');
 

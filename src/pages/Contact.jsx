@@ -3,8 +3,10 @@ import { Phone, MessageCircle, Mail, MapPin, Send, CheckCircle2 } from 'lucide-r
 import PageHero from '../components/PageHero';
 import PageSEO from '../components/PageSEO';
 import { siteConfig, getWhatsAppUrl } from '../data/siteConfig';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function Contact() {
+  const { submitInquiry, siteSettings } = useSiteContent();
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -16,8 +18,9 @@ export default function Contact() {
   });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = {};
     if (!form.name.trim()) errs.name = 'Please enter your name.';
@@ -26,7 +29,24 @@ export default function Contact() {
     }
     setErrors(errs);
     if (Object.keys(errs).length === 0) {
-      setSubmitted(true);
+      setSubmitting(true);
+      try {
+        await submitInquiry({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          profession: form.profession,
+          service: form.service,
+          country: form.country,
+          message: form.message,
+          sourcePage: 'Contact Page',
+        });
+      } catch (err) {
+        console.warn('Inquiry submit note:', err);
+      } finally {
+        setSubmitting(false);
+        setSubmitted(true);
+      }
     }
   };
 

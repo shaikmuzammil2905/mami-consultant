@@ -4,9 +4,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import ServiceCard from './ServiceCard';
-import { services } from '../data/services';
+import { services as defaultServices } from '../data/services';
+import { useSiteContent } from '../context/ContentContext';
 
 export default function ServiceGrid({ compact = true }) {
+  const { services = defaultServices } = useSiteContent();
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
