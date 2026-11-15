@@ -7,6 +7,7 @@ import awardPosterImg from '../assets/award-ramya-poster.png';
 import drRamyakrishnaImg from '../assets/dr-ramyakrishna-founder.jpg';
 import drVarathachalamImg from '../assets/dr-varathachalam.png';
 import drPradhunaRaviImg from '../assets/dr-pradhuna-ravi.png';
+import marketingHeadImg from '../assets/marketing-head-bdm.jpg';
 
 export const medicalAdvisors = [
   {
@@ -17,6 +18,7 @@ export const medicalAdvisors = [
     role: 'Senior Medical Career Consultant',
     subRole: 'International Medical Career Pathways',
     badge: 'Senior Medical Consultant',
+    category: 'medical',
     image: drVarathachalamImg,
     description:
       'Senior MBBS clinical career consultant guiding Doctors and Healthcare Specialists through international medical licensing, PLAB/GMC UK pathways, DHA/DOH/MOH UAE boards, and GCC Prometric eligibility.',
@@ -35,6 +37,7 @@ export const medicalAdvisors = [
     role: 'Medical Advisory and Professional Leadership',
     subRole: 'Clinical Advisory & Strategic Leadership',
     badge: 'Medical Advisory Board',
+    category: 'medical',
     image: drPradhunaRaviImg,
     description:
       'Senior MBBS medical advisor leading clinical career strategy, credential verification standards, healthcare professional mentorship, and international hospital interview readiness.',
@@ -45,7 +48,27 @@ export const medicalAdvisors = [
       'Healthcare Interview Mentorship & Career Leadership',
     ],
   },
+  {
+    id: 'marketing-head-bdm',
+    name: 'Marketing Head & BDM',
+    displayName: 'Marketing Head & Business Development Manager',
+    role: 'Marketing Head & Business Development Manager',
+    subRole: 'Global Healthcare Partnerships & Strategic Growth',
+    badge: 'Business Development & Marketing',
+    category: 'executive',
+    image: marketingHeadImg,
+    description:
+      'Spearheading international healthcare partnerships, institutional hospital collaborations, strategic brand outreach, and global candidate career growth across India, the UAE, and international healthcare destinations.',
+    highlights: [
+      'Marketing Head & Business Development Manager',
+      'Global Healthcare Alliances & Hospital Tie-ups',
+      'Strategic Candidate Engagement & Brand Growth',
+      'UAE, GCC & International Business Expansion',
+    ],
+  },
 ];
+
+export const leadershipTeam = medicalAdvisors;
 
 export const founderProfile = {
   name: 'Dr. Ramyakrishna Mamidala',
