@@ -38,6 +38,7 @@ const Collaborate = lazy(() => import('./pages/Collaborate'));
 const CollaborateRequirement = lazy(() => import('./pages/CollaborateRequirement'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Enquiry = lazy(() => import('./pages/Enquiry'));
+const Registration = lazy(() => import('./pages/Registration'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Admin CMS Manager Pages
@@ -173,6 +174,9 @@ function AppShell() {
                 <Route path="/collaborate/requirement" element={<PageTransitionWrapper><CollaborateRequirement /></PageTransitionWrapper>} />
                 <Route path="/contact" element={<PageTransitionWrapper><Contact /></PageTransitionWrapper>} />
                 <Route path="/enquiry" element={<PageTransitionWrapper><Enquiry /></PageTransitionWrapper>} />
+                <Route path="/registration" element={<PageTransitionWrapper><Registration /></PageTransitionWrapper>} />
+                <Route path="/registration-form" element={<PageTransitionWrapper><Registration /></PageTransitionWrapper>} />
+                <Route path="/register" element={<PageTransitionWrapper><Registration /></PageTransitionWrapper>} />
                 <Route path="*" element={<PageTransitionWrapper><NotFound /></PageTransitionWrapper>} />
               </Routes>
             </AnimatePresence>

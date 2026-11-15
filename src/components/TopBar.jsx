@@ -1,4 +1,5 @@
-import { Phone, Mail, MessageCircle, Facebook, Linkedin, Youtube } from 'lucide-react';
+import { Phone, Mail, MessageCircle, Facebook, Linkedin, Youtube, CreditCard, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { siteConfig, getWhatsAppIndiaUrl, getWhatsAppUAEUrl } from '../data/siteConfig';
 import { useSiteContent } from '../context/ContentContext';
 
@@ -77,6 +78,16 @@ export default function TopBar() {
             <Mail className="w-3.5 h-3.5 shrink-0" />
             <span className="font-medium">{email}</span>
           </a>
+
+          {/* Direct Registration Form Pill Link */}
+          <Link
+            to="/registration"
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-300 hover:bg-amber-400 text-amber-950 font-black text-[10px] sm:text-[11px] transition-all shadow-xs"
+            title="Open Candidate Registration Form"
+          >
+            <CreditCard className="w-3 h-3 text-amber-900 shrink-0" />
+            <span>Registration Form (UPI QR)</span>
+          </Link>
         </div>
 
         {/* Desktop Right Social Icons */}

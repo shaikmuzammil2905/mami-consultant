@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ChevronDown, ArrowRight, Menu, X, Phone, MessageCircle } from 'lucide-react';
+import { ChevronDown, ArrowRight, Menu, X, Phone, MessageCircle, Sparkles, CreditCard } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { siteConfig, getWhatsAppUrl } from '../data/siteConfig';
 import { useModal } from '../context/ModalContext';
@@ -213,10 +213,32 @@ export default function Header() {
             <NavLink to="/contact" className={navLinkClass}>
               Contact Us
             </NavLink>
+
+            <NavLink
+              to="/registration"
+              className={({ isActive }) =>
+                `inline-flex items-center gap-1 px-2 xl:px-2.5 2xl:px-3 py-1 xl:py-1.5 rounded-full text-[11px] xl:text-[12px] 2xl:text-[13px] font-bold transition-all duration-200 whitespace-nowrap shadow-2xs ${
+                  isActive
+                    ? 'bg-amber-500 text-white shadow-sm'
+                    : 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 hover:border-amber-400'
+                }`
+              }
+            >
+              <CreditCard className="w-3 h-3 text-amber-600 shrink-0" />
+              <span>Registration Form</span>
+            </NavLink>
           </nav>
 
           {/* Desktop Right CTA + Mobile Hamburger */}
           <div className="flex items-center gap-2 shrink-0">
+            <NavLink
+              to="/registration"
+              className="hidden lg:inline-flex items-center gap-1 px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-[11px] xl:text-xs shadow-md hover:shadow-lg transition-all whitespace-nowrap"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+              <span>Register Now</span>
+            </NavLink>
+
             <button
               type="button"
               onClick={() => openModal('enquiry', { source: 'Header Button' })}
@@ -281,6 +303,18 @@ export default function Header() {
                 </div>
 
                 <div className="p-4 space-y-1.5">
+                  <NavLink
+                    to="/registration"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-between p-3.5 mb-2 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-black text-sm shadow-md"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <CreditCard className="w-4 h-4 text-amber-200" />
+                      <span>Registration Form (UPI QR)</span>
+                    </div>
+                    <ArrowRight className="w-4 h-4" />
+                  </NavLink>
+
                   <NavLink
                     to="/"
                     end

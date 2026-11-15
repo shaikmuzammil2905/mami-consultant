@@ -66,6 +66,7 @@ export default function Footer() {
                 { label: 'Job Assistance', to: '/jobs' },
                 { label: 'Career', to: '/career' },
                 { label: 'Collaborate With MAMI', to: '/collaborate' },
+                { label: 'Candidate Registration Form', to: '/registration' },
                 { label: 'Contact Us', to: '/contact' },
               ].map((item) => (
                 <li key={item.to}>
