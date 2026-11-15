@@ -94,20 +94,21 @@ export default function FounderSection({ showExtendedBio = true, className = '' 
                   {/* Gradient Overlay at Bottom */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B3566]/80 via-transparent to-transparent pointer-events-none" />
 
-                  {/* Floating Pill on Image: Founder & Director */}
-                  <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0B3566]/90 backdrop-blur-md text-white border border-white/20 shadow-lg">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-                    <span className="text-[11px] font-black tracking-wide uppercase">
-                      Founder &amp; Director
-                    </span>
-                  </div>
+                  {/* Top Badges Bar: Responsive flex container with zero overlapping */}
+                  <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-1.5 pointer-events-none">
+                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0B3566]/90 backdrop-blur-md text-white border border-white/20 shadow-lg">
+                      <Sparkles className="w-3 h-3 text-amber-300 fill-amber-300 shrink-0" />
+                      <span className="text-[10px] sm:text-[11px] font-black tracking-wide uppercase whitespace-nowrap">
+                        Founder &amp; Director
+                      </span>
+                    </div>
 
-                  {/* Floating Pill on Image: Clinical Experience */}
-                  <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-700/90 backdrop-blur-md text-white border border-white/20 shadow-lg">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-200" />
-                    <span className="text-[11px] font-bold tracking-wide">
-                      12+ Yrs Experience
-                    </span>
+                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-700/90 backdrop-blur-md text-white border border-white/20 shadow-lg">
+                      <ShieldCheck className="w-3 h-3 text-emerald-200 shrink-0" />
+                      <span className="text-[10px] sm:text-[11px] font-bold tracking-wide whitespace-nowrap">
+                        12+ Yrs Exp
+                      </span>
+                    </div>
                   </div>
 
                   {/* Bottom Image Overlay Card */}

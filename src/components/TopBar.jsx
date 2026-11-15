@@ -5,7 +5,10 @@ import { useSiteContent } from '../context/ContentContext';
 
 export default function TopBar() {
   const { siteSettings } = useSiteContent();
-  const phoneIndia = siteSettings?.phone || siteConfig.phoneIndia;
+  const phoneIndia =
+    siteSettings?.phone && !siteSettings.phone.includes('9533079819')
+      ? siteSettings.phone
+      : siteConfig.phoneIndia;
   const phoneUAE = siteConfig.phoneUAE;
   const email = siteSettings?.email || siteConfig.email;
 
@@ -79,10 +82,10 @@ export default function TopBar() {
             <span className="font-medium">{email}</span>
           </a>
 
-          {/* Direct Registration Form Pill Link */}
+          {/* Direct Registration Form Pill Link (Desktop/Tablet) */}
           <Link
             to="/registration"
-            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-300 hover:bg-amber-400 text-amber-950 font-black text-[10px] sm:text-[11px] transition-all shadow-xs"
+            className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-300 hover:bg-amber-400 text-amber-950 font-black text-[10px] sm:text-[11px] transition-all shadow-xs"
             title="Open Candidate Registration Form"
           >
             <CreditCard className="w-3 h-3 text-amber-900 shrink-0" />

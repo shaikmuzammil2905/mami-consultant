@@ -5,6 +5,47 @@ import awardGroupImg from '../assets/award-dubai-group.png';
 import awardCertImg from '../assets/award-certificate-excellence.png';
 import awardPosterImg from '../assets/award-ramya-poster.png';
 import drRamyakrishnaImg from '../assets/dr-ramyakrishna-founder.jpg';
+import drVarathachalamImg from '../assets/dr-varathachalam.png';
+import drPradhunaRaviImg from '../assets/dr-pradhuna-ravi.png';
+
+export const medicalAdvisors = [
+  {
+    id: 'dr-varathachalam',
+    name: 'Dr. Varathachalam',
+    degree: 'MBBS',
+    displayName: 'Dr. Varathachalam, MBBS',
+    role: 'Senior Medical Career Consultant',
+    subRole: 'International Medical Career Pathways',
+    badge: 'Senior Medical Consultant',
+    image: drVarathachalamImg,
+    description:
+      'Senior MBBS clinical career consultant guiding Doctors and Healthcare Specialists through international medical licensing, PLAB/GMC UK pathways, DHA/DOH/MOH UAE boards, and GCC Prometric eligibility.',
+    highlights: [
+      'Senior Medical Career Consultant',
+      'International Medical Career Pathways',
+      'Physician & Doctor Board Licensing Specialist',
+      'UK NHS, Ireland, UAE & GCC Hospital Alignment',
+    ],
+  },
+  {
+    id: 'dr-pradhuna-ravi',
+    name: 'Dr. Pradhuna Ravi',
+    degree: 'MBBS',
+    displayName: 'Dr. Pradhuna Ravi, MBBS',
+    role: 'Medical Advisory and Professional Leadership',
+    subRole: 'Clinical Advisory & Strategic Leadership',
+    badge: 'Medical Advisory Board',
+    image: drPradhunaRaviImg,
+    description:
+      'Senior MBBS medical advisor leading clinical career strategy, credential verification standards, healthcare professional mentorship, and international hospital interview readiness.',
+    highlights: [
+      'Medical Advisory and Professional Leadership',
+      'Clinical Governance & Career Strategy',
+      'International Credential & Verification Guidance',
+      'Healthcare Interview Mentorship & Career Leadership',
+    ],
+  },
+];
 
 export const founderProfile = {
   name: 'Dr. Ramyakrishna Mamidala',

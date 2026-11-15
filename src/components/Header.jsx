@@ -248,6 +248,15 @@ export default function Header() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
 
+            {/* Mobile Register Button */}
+            <NavLink
+              to="/registration"
+              className="lg:hidden inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-black text-xs shadow-sm hover:opacity-95 transition-all active:scale-95"
+            >
+              <CreditCard className="w-3.5 h-3.5 text-amber-100 shrink-0" />
+              <span>Register</span>
+            </NavLink>
+
             {/* Mobile Hamburger Button matching mobile UI reference */}
             <button
               type="button"

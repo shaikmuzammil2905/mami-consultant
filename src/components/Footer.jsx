@@ -8,8 +8,14 @@ export default function Footer() {
   const { siteSettings } = useSiteContent();
   const [openAccordion, setOpenAccordion] = useState(null);
 
-  const phone = siteSettings?.phone || siteConfig.phone;
-  const whatsapp = siteSettings?.whatsapp || siteConfig.whatsapp;
+  const phone =
+    siteSettings?.phone && !siteSettings.phone.includes('9533079819')
+      ? siteSettings.phone
+      : siteConfig.phone;
+  const whatsapp =
+    siteSettings?.whatsapp && !siteSettings.whatsapp.includes('9533079819')
+      ? siteSettings.whatsapp
+      : siteConfig.whatsapp;
   const email = siteSettings?.email || siteConfig.email;
   const address = siteSettings?.address || siteConfig.address;
   const footerSummary = siteSettings?.footer_text || siteConfig.tagline;

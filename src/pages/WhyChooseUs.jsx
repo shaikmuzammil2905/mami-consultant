@@ -15,6 +15,7 @@ import PageSEO from '../components/PageSEO';
 import SectionHeading from '../components/SectionHeading';
 import CertificationsSection from '../components/CertificationsSection';
 import FounderSection from '../components/FounderSection';
+import MedicalLeadershipSection from '../components/MedicalLeadershipSection';
 import CTASection from '../components/CTASection';
 import { founderProfile } from '../data/founderAndCertifications';
 import { getWhatsAppUrl } from '../data/siteConfig';
@@ -59,6 +60,7 @@ export default function WhyChooseUs() {
 
       {/* ==================== MEET OUR FOUNDER ==================== */}
       <FounderSection />
+      <MedicalLeadershipSection />
 
       {/* ==================== HER JOURNEY & WHY SHE STARTED MAMI ==================== */}
       <section className="py-12 sm:py-16 bg-mami-soft-cyan">
